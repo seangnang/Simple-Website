@@ -1,0 +1,98 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Learn Without Limits</h1>
+                <p class="lead mb-4">Start, switch, or advance your career with more than 5,000 courses, Professional Certificates, and degrees from world-class universities and companies.</p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg px-4 fw-bold text-primary">Join for Free</a>
+                    <a href="#courses" class="btn btn-outline-light btn-lg px-4">Explore Courses</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Students learning" class="img-fluid rounded-3 shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-n5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow border-0 py-3">
+                <div class="row text-center">
+                    <div class="col-md-4 border-end">
+                        <h3 class="fw-bold text-primary mb-0">400+</h3>
+                        <small class="text-muted">Active Students</small>
+                    </div>
+                    <div class="col-md-4 border-end">
+                        <h3 class="fw-bold text-primary mb-0">50+</h3>
+                        <small class="text-muted">Expert Instructors</small>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="fw-bold text-primary mb-0">200+</h3>
+                        <small class="text-muted">Video Courses</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="courses" class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Popular Courses</h2>
+        <a asp-controller="Course" asp-action="Index" class="text-decoration-none">View All Courses &rarr;</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Web Development">
+                <div class="card-body">
+                    <span class="badge bg-soft-primary text-primary mb-2">Development</span>
+                    <h5 class="card-title fw-bold">Full-Stack Web Development BootCamp</h5>
+                    <p class="card-text text-muted small">Learn HTML, CSS, JS, and C# ASP.NET Core from scratch.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-success">$49.99</span>
+                        <a asp-controller="Course" asp-action="Details" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1551288049-bbbda546697a?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Data Science">
+                <div class="card-body">
+                    <span class="badge bg-soft-success text-success mb-2">Data Science</span>
+                    <h5 class="card-title fw-bold">Data Science & Machine Learning</h5>
+                    <p class="card-text text-muted small">Master Python, SQL, and AI algorithms.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-success">$59.99</span>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="UI/UX Design">
+                <div class="card-body">
+                    <span class="badge bg-soft-warning text-warning mb-2">Design</span>
+                    <h5 class="card-title fw-bold">Modern UI/UX Design Fundamentals</h5>
+                    <p class="card-text text-muted small">Learn Figma, Adobe XD, and user-centric design.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-success">Free</span>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
