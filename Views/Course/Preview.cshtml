@@ -1,0 +1,52 @@
+﻿@model SimpleWebsite.Models.Lesson
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">@Model.Title — Free Preview</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Course" asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Details" asp-route-id="@Model.CourseId">@Model.Course?.Title</a>
+                    </li>
+                    <li class="breadcrumb-item active">Preview</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="ratio ratio-16x9 mb-3 rounded overflow-hidden bg-dark">
+                        @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                        {
+                            @if (Model.VideoUrl.Contains("youtube.com") || Model.VideoUrl.Contains("youtu.be"))
+                            {
+                                <iframe src="@Model.VideoUrl" allowfullscreen></iframe>
+                            }
+                            else
+                            {
+                                <video controls class="w-100 h-100" style="object-fit:contain;">
+                                    <source src="@Model.VideoUrl" type="video/mp4" />
+                                </video>
+                            }
+                        }
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="ti ti-info-circle me-2"></i>
+                        This is a free preview.
+                        <a asp-action="Details" asp-route-id="@Model.CourseId">Enroll now</a>
+                        to access all lessons.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

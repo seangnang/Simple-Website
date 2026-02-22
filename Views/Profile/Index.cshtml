@@ -1,0 +1,118 @@
+﻿@model SimpleWebsite.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">My Profile</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Profile Info -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle bg-light-primary d-inline-flex align-items-center
+                                    justify-content-center mb-3"
+                             style="width:80px; height:80px;">
+                            <i class="ti ti-user fs-1 text-primary"></i>
+                        </div>
+                        <h5 class="fw-semibold">@User.Identity?.Name</h5>
+                        <span class="badge bg-primary">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <text>Admin</text>
+                            }
+                            else if (User.IsInRole("Instructor"))
+                            {
+
+                                <text>Instructor</text>
+                            }
+                            else
+                            {
+
+                                <text>Student</text>
+                            }
+                        </span>
+                    </div>
+
+                    <h6 class="fw-semibold mb-3">
+                        <i class="ti ti-edit me-2"></i>Edit Profile
+                    </h6>
+                    <form asp-action="Index" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input asp-for="Fullname" class="form-control" />
+                            <span asp-validation-for="Fullname" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-check me-1"></i>Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3">
+                        <i class="ti ti-lock me-2"></i>Change Password
+                    </h6>
+                    <form asp-action="ChangePassword" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Current Password</label>
+                            <input type="password" name="currentPassword" class="form-control"
+                                   placeholder="Enter current password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">New Password</label>
+                            <input type="password" name="newPassword" class="form-control"
+                                   placeholder="Enter new password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Confirm New Password</label>
+                            <input type="password" name="confirmPassword" class="form-control"
+                                   placeholder="Confirm new password" required />
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="ti ti-key me-1"></i>Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

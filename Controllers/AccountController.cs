@@ -1,10 +1,7 @@
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using SimpleWebsite.Models;
 using SimpleWebsite.ViewModels;
-using System.Diagnostics.Eventing.Reader;
 
 namespace SimpleWebsite.Controllers
 {
@@ -12,17 +9,20 @@ namespace SimpleWebsite.Controllers
     {
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
-        //Login
-        public IActionResult Login()
-        {
-            return View();
-        }
+
+        public IActionResult Index() => View();
+
+        // ── Login ────────────────────────────────────────────────
+        public IActionResult Login() => View();
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -31,52 +31,57 @@ namespace SimpleWebsite.Controllers
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
-                }
-                else {
+                    var user = await userManager.FindByEmailAsync(model.Email);
 
-                    ModelState.AddModelError("", "Email or password is incorrect.");
-                    return View(model);
+                    if (await userManager.IsInRoleAsync(user, "Admin"))
+                        return RedirectToAction("Index", "Admin");
+
+                    if (await userManager.IsInRoleAsync(user, "Instructor"))
+                        return RedirectToAction("Index", "Instructor");
+
+                    // Default → Student
+                    return RedirectToAction("Index", "Course");
                 }
+                ModelState.AddModelError("", "Email or password is incorrect.");
             }
             return View(model);
         }
-        //Register
-        public IActionResult Register()
-        {
-            return View();
-        }
+
+        // ── Register ─────────────────────────────────────────────
+        public IActionResult Register() => View();
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
-        { 
-            if(ModelState.IsValid)
+        {
+            if (ModelState.IsValid)
             {
-                Users users = new Users
+                var user = new Users
                 {
                     Fullname = model.Name,
                     Email = model.Email,
                     UserName = model.Email,
                 };
-                var result = await userManager.CreateAsync(users ,model.Password);
-                if (result.Succeeded) 
+
+                var result = await userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                     return RedirectToAction("Login", "Account");
+                    await userManager.AddToRoleAsync(user, "Student");
+                    return RedirectToAction("Login", "Account");
                 }
-                else 
-                {
-                     foreach (var error in result.Errors)
-                     {
-                            ModelState.AddModelError("", error.Description);
-                     }
-                     return View(model);
-                }
+
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
             }
             return View(model);
         }
-        public async Task<IActionResult> Logout()
+
+        // ── Logout ───────────────────────────────────────────────
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return returnUrl != null ? LocalRedirect(returnUrl) : RedirectToAction("Index", "Home");
         }
     }
 }

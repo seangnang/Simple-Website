@@ -1,98 +1,597 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SimpleWebsite.Models.Users> SignInManager
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "LearnHub - Learn Without Limits";
+    Layout = null;
 }
 
-<section class="bg-primary text-white py-5">
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">Learn Without Limits</h1>
-                <p class="lead mb-4">Start, switch, or advance your career with more than 5,000 courses, Professional Certificates, and degrees from world-class universities and companies.</p>
-                <div class="d-flex gap-3">
-                    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg px-4 fw-bold text-primary">Join for Free</a>
-                    <a href="#courses" class="btn btn-outline-light btn-lg px-4">Explore Courses</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Navbar */
+        .landing-nav {
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 1.5rem;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .nav-links a:hover {
+                color: var(--primary);
+            }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .hero::before {
+                content: '';
+                position: absolute;
+                width: 600px;
+                height: 600px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 50%;
+                top: -200px;
+                right: -100px;
+            }
+
+            .hero::after {
+                content: '';
+                position: absolute;
+                width: 400px;
+                height: 400px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 50%;
+                bottom: -150px;
+                left: -100px;
+            }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.2rem;
+        }
+
+        .btn-hero {
+            background: white;
+            color: var(--primary);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+            .btn-hero:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                color: var(--primary);
+            }
+
+        .btn-hero-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.6);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+            .btn-hero-outline:hover {
+                background: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+        /* Stats */
+        .stats-section {
+            background: white;
+            padding: 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Cards */
+        .course-card {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+            .course-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+            }
+
+            .course-card img {
+                height: 200px;
+                object-fit: cover;
+                width: 100%;
+            }
+
+        /* Category cards */
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+            .category-card:hover {
+                border-color: var(--primary);
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(79,70,229,0.1);
+                color: inherit;
+            }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: #ede9fe;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Features */
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: #9ca3af;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .footer a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+            .footer a:hover {
+                color: white;
+            }
+
+        /* Section */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="landing-nav d-flex align-items-center justify-content-between">
+        <a class="nav-brand" href="#">
+            <i class="fas fa-graduation-cap me-2"></i>LearnHub
+        </a>
+        <div class="nav-links d-flex align-items-center">
+            <a href="#courses">Courses</a>
+            <a href="#categories">Categories</a>
+            <a href="#features">Features</a>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a asp-controller="Dashboard" asp-action="Index"
+                   class="btn btn-primary ms-3 px-4 py-2 rounded-pill">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-outline-secondary ms-2 px-4 py-2 rounded-pill">
+                        Logout
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login"
+                   class="ms-3" style="color: var(--primary); font-weight:600;">Login</a>
+                <a asp-controller="Account" asp-action="Register"
+                   class="btn btn-primary ms-2 px-4 py-2 rounded-pill"
+                   style="background:var(--primary); border:none;">
+                    Get Started
+                </a>
+            }
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container position-relative" style="z-index:1;">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title mb-4">
+                        Learn Without <span style="color:#fbbf24;">Limits</span>
+                    </h1>
+                    <p class="hero-subtitle mb-5">
+                        Access world-class courses from expert instructors.
+                        Learn at your own pace and advance your career.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a asp-controller="Course" asp-action="Index" class="btn-hero">
+                            <i class="fas fa-play-circle me-2"></i>Browse Courses
+                        </a>
+                        <a asp-controller="Account" asp-action="Register" class="btn-hero-outline">
+                            Start for Free
+                        </a>
+                    </div>
+                    <div class="d-flex gap-4 mt-5">
+                        <div>
+                            <p class="text-white fw-bold fs-4 mb-0">@ViewBag.TotalCourses+</p>
+                            <small style="color:rgba(255,255,255,0.7);">Courses</small>
+                        </div>
+                        <div>
+                            <p class="text-white fw-bold fs-4 mb-0">@ViewBag.TotalStudents+</p>
+                            <small style="color:rgba(255,255,255,0.7);">Students</small>
+                        </div>
+                        <div>
+                            <p class="text-white fw-bold fs-4 mb-0">@ViewBag.TotalInstructors+</p>
+                            <small style="color:rgba(255,255,255,0.7);">Instructors</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block text-center">
+                    <div style="background:rgba(255,255,255,0.1); border-radius:24px; padding:2rem;">
+                        <i class="fas fa-graduation-cap" style="font-size:8rem; color:rgba(255,255,255,0.8);"></i>
+                        <p class="text-white mt-3 fs-5 fw-semibold">Start Learning Today</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-block">
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Students learning" class="img-fluid rounded-3 shadow">
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3 stat-item">
+                    <div class="stat-number">@ViewBag.TotalCourses+</div>
+                    <div class="stat-label">Online Courses</div>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <div class="stat-number">@ViewBag.TotalStudents+</div>
+                    <div class="stat-label">Happy Students</div>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <div class="stat-number">@ViewBag.TotalInstructors+</div>
+                    <div class="stat-label">Expert Instructors</div>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                </div>
             </div>
         </div>
     </div>
-</section>
 
-<div class="container mt-n5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow border-0 py-3">
-                <div class="row text-center">
-                    <div class="col-md-4 border-end">
-                        <h3 class="fw-bold text-primary mb-0">400+</h3>
-                        <small class="text-muted">Active Students</small>
+    <!-- Categories -->
+    <section id="categories" style="background:#f9fafb;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Browse Categories</h2>
+                <p class="section-subtitle">Find courses in your area of interest</p>
+            </div>
+            <div class="row g-4">
+                @foreach (var cat in ViewBag.Categories as List<SimpleWebsite.Models.Categories>)
+                {
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <a asp-controller="Course" asp-action="Index"
+                           asp-route-categoryId="@cat.CategoryId" class="category-card">
+                            <div class="category-icon">
+                                <i class="@cat.Icon"></i>
+                            </div>
+                            <h6 class="fw-semibold mb-1">@cat.Name</h6>
+                            <small class="text-muted">@cat.Courses.Count Courses</small>
+                        </a>
                     </div>
-                    <div class="col-md-4 border-end">
-                        <h3 class="fw-bold text-primary mb-0">50+</h3>
-                        <small class="text-muted">Expert Instructors</small>
-                    </div>
-                    <div class="col-md-4">
-                        <h3 class="fw-bold text-primary mb-0">200+</h3>
-                        <small class="text-muted">Video Courses</small>
-                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Courses -->
+    <section id="courses">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="section-title">Featured Courses</h2>
+                    <p class="section-subtitle mb-0">Hand-picked courses for you</p>
                 </div>
+                <a asp-controller="Course" asp-action="Index"
+                   class="btn btn-outline-primary px-4 rounded-pill">
+                    View All
+                </a>
+            </div>
+            <div class="row g-4">
+                @foreach (var course in ViewBag.Courses as List<SimpleWebsite.Models.Course>)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="course-card">
+                            <img src="@(string.IsNullOrEmpty(course.Thumbnail) ? "https://via.placeholder.com/400x200?text=" + course.Title : course.Thumbnail)"
+                                 alt="@course.Title" />
+                            <div class="p-4">
+                                @if (course.Category != null)
+                                {
+                                    <span class="badge mb-2" style="background:#ede9fe; color:var(--primary);">
+                                        @course.Category.Name
+                                    </span>
+                                }
+                                <h5 class="fw-bold mb-2">@course.Title</h5>
+                                <p class="text-muted small mb-3">
+                                    <i class="fas fa-user me-1"></i>@course.Instructor?.Fullname
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold fs-5" style="color:var(--primary);">
+                                        @(course.Price == 0 ? "Free" : "$" + course.Price.ToString("0.00"))
+                                    </span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-play-circle me-1"></i>@course.Lessons.Count lessons
+                                        </small>
+                                        <a asp-controller="Course" asp-action="Details"
+                                           asp-route-id="@course.CourseId"
+                                           class="btn btn-sm btn-primary px-3 rounded-pill">
+                                            View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" style="background:#f9fafb;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Why Choose LearnHub?</h2>
+                <p class="section-subtitle">Everything you need to succeed</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#ede9fe;">
+                        <i class="fas fa-video" style="color:var(--primary);"></i>
+                    </div>
+                    <h5 class="fw-bold">HD Video Lessons</h5>
+                    <p class="text-muted">Watch high quality video lessons anytime, anywhere at your own pace.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#d1fae5;">
+                        <i class="fas fa-certificate" style="color:#10b981;"></i>
+                    </div>
+                    <h5 class="fw-bold">Certificates</h5>
+                    <p class="text-muted">Earn certificates upon completion to showcase your new skills.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#fef3c7;">
+                        <i class="fas fa-users" style="color:#f59e0b;"></i>
+                    </div>
+                    <h5 class="fw-bold">Expert Instructors</h5>
+                    <p class="text-muted">Learn from industry experts with real-world experience.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#fee2e2;">
+                        <i class="fas fa-infinity" style="color:#ef4444;"></i>
+                    </div>
+                    <h5 class="fw-bold">Lifetime Access</h5>
+                    <p class="text-muted">Buy once and access your courses forever, including future updates.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#e0e7ff;">
+                        <i class="fas fa-mobile-alt" style="color:#6366f1;"></i>
+                    </div>
+                    <h5 class="fw-bold">Learn Anywhere</h5>
+                    <p class="text-muted">Access your courses on any device — desktop, tablet or mobile.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon" style="background:#fce7f3;">
+                        <i class="fas fa-comments" style="color:#ec4899;"></i>
+                    </div>
+                    <h5 class="fw-bold">Community Support</h5>
+                    <p class="text-muted">Ask questions and discuss lessons with instructors and students.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <div class="container">
+            <h2 style="font-size:2.5rem; font-weight:800;" class="mb-3">
+                Ready to Start Learning?
+            </h2>
+            <p style="font-size:1.2rem; opacity:0.85;" class="mb-5">
+                Join thousands of students already learning on LearnHub
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a asp-controller="Account" asp-action="Register" class="btn-hero">
+                    <i class="fas fa-rocket me-2"></i>Get Started Free
+                </a>
+                <a asp-controller="Course" asp-action="Index" class="btn-hero-outline">
+                    Browse Courses
+                </a>
             </div>
         </div>
     </div>
-</div>
 
-<section id="courses" class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Popular Courses</h2>
-        <a asp-controller="Course" asp-action="Index" class="text-decoration-none">View All Courses &rarr;</a>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm hover-shadow">
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Web Development">
-                <div class="card-body">
-                    <span class="badge bg-soft-primary text-primary mb-2">Development</span>
-                    <h5 class="card-title fw-bold">Full-Stack Web Development BootCamp</h5>
-                    <p class="card-text text-muted small">Learn HTML, CSS, JS, and C# ASP.NET Core from scratch.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-success">$49.99</span>
-                        <a asp-controller="Course" asp-action="Details" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <div class="footer-brand mb-3">
+                        <i class="fas fa-graduation-cap me-2"></i>LearnHub
+                    </div>
+                    <p>Empowering learners worldwide with quality education and expert instruction.</p>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="text-white fw-bold mb-3">Platform</h6>
+                    <div class="d-flex flex-column gap-2">
+                        <a asp-controller="Course" asp-action="Index">Courses</a>
+                        <a asp-controller="Account" asp-action="Register">Register</a>
+                        <a asp-controller="Account" asp-action="Login">Login</a>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1551288049-bbbda546697a?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Data Science">
-                <div class="card-body">
-                    <span class="badge bg-soft-success text-success mb-2">Data Science</span>
-                    <h5 class="card-title fw-bold">Data Science & Machine Learning</h5>
-                    <p class="card-text text-muted small">Master Python, SQL, and AI algorithms.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-success">$59.99</span>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+                <div class="col-lg-2">
+                    <h6 class="text-white fw-bold mb-3">Categories</h6>
+                    <div class="d-flex flex-column gap-2">
+                        @foreach (var cat in (ViewBag.Categories as List<SimpleWebsite.Models.Categories>)?.Take(4) ?? new List<SimpleWebsite.Models.Categories>())
+                        {
+                            <a asp-controller="Course" asp-action="Index"
+                               asp-route-categoryId="@cat.CategoryId">@cat.Name</a>
+                        }
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="UI/UX Design">
-                <div class="card-body">
-                    <span class="badge bg-soft-warning text-warning mb-2">Design</span>
-                    <h5 class="card-title fw-bold">Modern UI/UX Design Fundamentals</h5>
-                    <p class="card-text text-muted small">Learn Figma, Adobe XD, and user-centric design.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-success">Free</span>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Enroll Now</a>
-                    </div>
+                <div class="col-lg-4">
+                    <h6 class="text-white fw-bold mb-3">Start Learning Today</h6>
+                    <p class="small">Join our community of learners and transform your career.</p>
+                    <a asp-controller="Account" asp-action="Register"
+                       class="btn btn-primary px-4 py-2 rounded-pill">
+                        Get Started Free
+                    </a>
                 </div>
             </div>
+            <hr style="border-color:#374151;" />
+            <div class="text-center">
+                <small>&copy; 2026 LearnHub. All rights reserved.</small>
+            </div>
         </div>
-    </div>
-</section>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.landing-nav');
+            if (window.scrollY > 50) {
+                nav.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            } else {
+                nav.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
+            }
+        });
+    </script>
+</body>
+</html>
