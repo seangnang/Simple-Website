@@ -1,0 +1,184 @@
+﻿@model SimpleWebsite.Models.Course
+@{
+    ViewData["Title"] = "Learn - " + Model.Title;
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var enrollment = ViewBag.Enrollment as SimpleWebsite.Models.Enrollment;
+    var currentLesson = ViewBag.CurrentLesson as SimpleWebsite.Models.Lesson;
+    var completedIds = enrollment?.LessonProgresses.Select(lp => lp.LessonId).ToList() ?? new List<int>();
+    int totalLessons = Model.Lessons.Count;
+    int completedCount = completedIds.Count;
+    int progressPercent = totalLessons > 0 ? (completedCount * 100 / totalLessons) : 0;
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-1">@Model.Title</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-action="Index">Courses</a></li>
+                            <li class="breadcrumb-item active">Learning</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-3 text-end">
+                    <span class="badge bg-primary fs-6">@progressPercent% Complete</span>
+                </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="progress mt-3" style="height:8px;">
+                <div class="progress-bar bg-primary" style="width:@progressPercent%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Video Player -->
+        <div class="ratio ratio-16x9 mb-3 rounded overflow-hidden bg-dark">
+            @if (!string.IsNullOrEmpty(currentLesson.VideoUrl))
+            {
+                @if (currentLesson.VideoUrl.Contains("youtube.com") ||
+                            currentLesson.VideoUrl.Contains("youtu.be"))
+                {
+                    <!-- YouTube embed -->
+                    <iframe src="@currentLesson.VideoUrl"
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope">
+                    </iframe>
+                }
+                else
+                {
+                    <!-- Uploaded video -->
+                    <video controls class="w-100 h-100" style="object-fit:contain;">
+                        <source src="@currentLesson.VideoUrl" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                }
+            }
+            else
+            {
+                <div class="d-flex align-items-center justify-content-center text-white h-100">
+                    <div class="text-center">
+                        <i class="ti ti-video-off fs-1"></i>
+                        <p class="mt-2">No video added yet.</p>
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- Comments Section -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">
+                    <i class="ti ti-message-dots me-2"></i>Discussion
+                    <span class="badge bg-light-primary text-primary ms-2">
+                        @(ViewBag.Comments as List<SimpleWebsite.Models.Comment>)?.Count
+                    </span>
+                </h6>
+
+                <!-- Add Comment -->
+                @if (ViewBag.CurrentLesson != null)
+                {
+                    <form asp-controller="Comment" asp-action="Create" method="post" class="mb-4">
+                        <input type="hidden" name="lessonId" value="@((ViewBag.CurrentLesson as SimpleWebsite.Models.Lesson)?.LessonId)" />
+                        <input type="hidden" name="courseId" value="@Model.CourseId" />
+                        <div class="input-group">
+                            <input type="text" name="content" class="form-control"
+                                   placeholder="Ask a question or share a thought..." required />
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ti ti-send"></i>
+                            </button>
+                        </div>
+                    </form>
+                }
+
+                <!-- Comments List -->
+                @{
+                    var comments = ViewBag.Comments as List<SimpleWebsite.Models.Comment>;
+                }
+                @if (comments != null && comments.Any())
+                {
+                    @foreach (var comment in comments)
+                    {
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="rounded-circle bg-light-primary d-flex align-items-center
+                                        justify-content-center flex-shrink-0"
+                                 style="width:40px; height:40px;">
+                                <i class="ti ti-user text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <p class="fw-semibold mb-0">@comment.User?.Fullname</p>
+                                    <small class="text-muted">@comment.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                </div>
+                                <p class="text-muted mb-1">@comment.Content</p>
+                                @if (ViewBag.CurrentUserId == comment.UserId)
+                                {
+                                    <form asp-controller="Comment" asp-action="Delete" method="post">
+                                        <input type="hidden" name="commentId" value="@comment.CommentId" />
+                                        <input type="hidden" name="courseId" value="@Model.CourseId" />
+                                        <input type="hidden" name="lessonId" value="@((ViewBag.CurrentLesson as SimpleWebsite.Models.Lesson)?.LessonId)" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted text-center py-3">
+                        No comments yet. Be the first to ask a question!
+                    </p>
+                }
+            </div>
+        </div>
+
+        <!-- Lessons Sidebar -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="p-3 border-bottom">
+                        <h6 class="fw-semibold mb-0">
+                            <i class="ti ti-list me-2"></i>Lessons
+                            <span class="text-muted float-end">@completedCount/@totalLessons</span>
+                        </h6>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        @foreach (var lesson in Model.Lessons.OrderBy(l => l.Order))
+                        {
+                            bool isCompleted = completedIds.Contains(lesson.LessonId);
+                            bool isCurrent = currentLesson?.LessonId == lesson.LessonId;
+
+                            <a asp-action="Learn" asp-route-id="@Model.CourseId" asp-route-lessonId="@lesson.LessonId"
+                               class="list-group-item list-group-item-action d-flex align-items-center gap-3 @(isCurrent ? "active" : "")">
+                                @if (isCompleted)
+                                {
+                                    <i class="ti ti-circle-check text-success fs-5"></i>
+                                }
+                                else if (isCurrent)
+                                {
+                                    <i class="ti ti-player-play fs-5"></i>
+                                }
+                                else
+                                {
+                                    <i class="ti ti-circle text-muted fs-5"></i>
+                                }
+                                <div class="flex-grow-1">
+                                    <p class="mb-0 small fw-semibold">@lesson.Title</p>
+                                    <small class="@(isCurrent ? "" : "text-muted")">
+                                        <i class="ti ti-clock me-1"></i>@lesson.Duration min
+                                    </small>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

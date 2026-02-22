@@ -1,33 +1,47 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SimpleWebsite.Models;
+using Microsoft.EntityFrameworkCore;
+using SimpleWebsite.Data;
 
 namespace SimpleWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(AppDbContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Featured courses
+            ViewBag.Courses = await context.Courses
+                .Include(c => c.Instructor)
+                .Include(c => c.Lessons)
+                .Include(c => c.Category)
+                .Where(c => c.IsPublished)
+                .OrderByDescending(c => c.CreatedAt)
+                .Take(6)
+                .ToListAsync();
+
+            // Stats
+            ViewBag.TotalCourses = await context.Courses.CountAsync(c => c.IsPublished);
+            ViewBag.TotalStudents = await context.Users.CountAsync();
+            ViewBag.TotalInstructors = (await context.UserRoles
+                .Join(context.Roles,
+                    ur => ur.RoleId,
+                    r => r.Id,
+                    (ur, r) => new { ur, r })
+                .Where(x => x.r.Name == "Instructor")
+                .ToListAsync()).Count;
+
+            // Categories
+            ViewBag.Categories = await context.Categories
+                .Include(c => c.Courses)
+                .ToListAsync();
+
             return View();
-        }
-        [Authorize]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

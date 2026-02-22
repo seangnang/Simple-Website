@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SimpleWebsite.Models.Users>
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">User Management</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Users</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Current Role</th>
+                        <th>Assign Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var roles = ViewBag.UserRoles[user.Id] as IList<string>;
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.Fullname</td>
+                            <td>
+                                @if (roles != null && roles.Any())
+                                {
+                                    foreach (var role in roles)
+                                    {
+                                        <span class="badge @(role == "Admin" ? "bg-danger" : role == "Instructor" ? "bg-warning text-dark" : "bg-success")">
+                                            @role
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">No Role</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <!-- Assign Admin -->
+                                    <form asp-action="AssignRole" method="post" style="display:inline">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <input type="hidden" name="roleName" value="Admin" />
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="ti ti-shield me-1"></i>Admin
+                                        </button>
+                                    </form>
+
+                                    <!-- Assign Instructor -->
+                                    <form asp-action="AssignRole" method="post" style="display:inline">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <input type="hidden" name="roleName" value="Instructor" />
+                                        <button type="submit" class="btn btn-sm btn-warning">
+                                            <i class="ti ti-chalkboard me-1"></i>Instructor
+                                        </button>
+                                    </form>
+
+                                    <!-- Assign Student -->
+                                    <form asp-action="AssignRole" method="post" style="display:inline">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <input type="hidden" name="roleName" value="Student" />
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="ti ti-school me-1"></i>Student
+                                        </button>
+                                    </form>
+
+                                    <!-- Remove Role -->
+                                    @if (roles != null && roles.Any())
+                                    {
+                                        <form asp-action="RemoveRole" method="post" style="display:inline">
+                                            <input type="hidden" name="userId" value="@user.Id" />
+                                            <input type="hidden" name="roleName" value="@roles.First()" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="ti ti-x me-1"></i>Remove
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

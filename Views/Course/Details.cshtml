@@ -1,0 +1,226 @@
+﻿@model SimpleWebsite.Models.Course
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    bool isEnrolled = ViewBag.IsEnrolled ?? false;
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none position-relative overflow-hidden mb-4">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-1">@Model.Title</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-action="Index">Courses</a></li>
+                            <li class="breadcrumb-item active">Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Course Info -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <img src="@(string.IsNullOrEmpty(Model.Thumbnail) ? "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" : Model.Thumbnail)"
+                     class="card-img-top" style="height:300px; object-fit:cover;" />
+                <div class="card-body">
+                    <h4 class="fw-semibold">@Model.Title</h4>
+                    <p class="text-muted">
+                        <i class="ti ti-user me-1"></i>Instructor: <strong>@Model.Instructor?.Fullname</strong>
+                    </p>
+                    <hr />
+                    <h6 class="fw-semibold">About this course</h6>
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+
+            <!-- Lessons List -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3">
+                        <i class="ti ti-list me-2"></i>Course Content
+                        <span class="badge bg-light-primary text-primary ms-2">@Model.Lessons.Count Lessons</span>
+                    </h5>
+                    @if (!Model.Lessons.Any())
+                    {
+                        <p class="text-muted">No lessons yet.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var lesson in Model.Lessons.OrderBy(l => l.Order))
+                            {
+                                <div class="list-group-item d-flex align-items-center gap-3 px-0">
+                                    <span class="badge bg-light-primary text-primary rounded-circle p-2">
+                                        @lesson.Order
+                                    </span>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 fw-semibold">@lesson.Title</p>
+                                        <small class="text-muted">
+                                            <i class="ti ti-clock me-1"></i>@lesson.Duration min
+                                        </small>
+                                    </div>
+                                    @if (lesson.IsPreview)
+                                    {
+                                        <a asp-controller="Course" asp-action="Preview"
+                                           asp-route-lessonId="@lesson.LessonId"
+                                           class="badge bg-success text-white">
+                                            Free Preview
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <i class="ti ti-lock text-muted"></i>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Enroll Card -->
+        <div class="col-lg-4">
+            <div class="card sticky-top" style="top: 80px;">
+                <div class="card-body text-center">
+                    <h2 class="fw-bold text-primary mb-3">
+                        @(Model.Price == 0 ? "Free" : "$" + Model.Price.ToString("0.00"))
+                    </h2>
+
+                    @if (isEnrolled)
+                    {
+                        <a asp-action="Learn" asp-route-id="@Model.CourseId"
+                           class="btn btn-success w-100 mb-3">
+                            <i class="ti ti-player-play me-2"></i>Continue Learning
+                        </a>
+                    }
+                    else if (User.IsInRole("Student"))
+                    {
+                        @if (Model.Price == 0)
+                        {
+                            <form asp-action="Enroll" method="post">
+                                <input type="hidden" name="courseId" value="@Model.CourseId" />
+                                <button type="submit" class="btn btn-primary w-100 mb-3">
+                                    <i class="ti ti-school me-2"></i>Enroll Free
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Payment" asp-action="Checkout"
+                               asp-route-courseId="@Model.CourseId"
+                               class="btn btn-primary w-100 mb-3">
+                                <i class="ti ti-credit-card me-2"></i>Buy Now — $@Model.Price.ToString("0.00")
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login"
+                           class="btn btn-outline-primary w-100 mb-3">
+                            <i class="ti ti-login me-2"></i>Login to Enroll
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- Reviews Section -->
+        <div class="col-lg-8 mt-4">
+            <!-- Average Rating -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-3">
+                        <i class="ti ti-star me-2"></i>Student Reviews
+                        <span class="badge bg-light-primary text-primary ms-2">@ViewBag.Reviews.Count</span>
+                    </h5>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <h1 class="fw-bold text-warning mb-0">@ViewBag.AvgRating</h1>
+                        <div>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="ti ti-star-filled text-@(i <= ViewBag.AvgRating ? "warning" : "muted")"></i>
+                            }
+                            <p class="text-muted mb-0 small">@ViewBag.Reviews.Count reviews</p>
+                        </div>
+                    </div>
+
+                    <!-- Add Review Form -->
+                    @if (ViewBag.IsEnrolled && !ViewBag.HasReviewed)
+                    {
+                        <hr />
+                        <h6 class="fw-semibold mb-3">Write a Review</h6>
+                        <form asp-controller="Review" asp-action="Create" method="post">
+                            <input type="hidden" name="courseId" value="@Model.CourseId" />
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Rating</label>
+                                <div class="d-flex gap-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                                   name="rating" value="@i" id="star@i"
+                                                   @(i == 5 ? "checked" : "") />
+                                            <label class="form-check-label" for="star@i">
+                                                @i <i class="ti ti-star-filled text-warning"></i>
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Comment</label>
+                                <textarea name="comment" class="form-control" rows="3"
+                                      placeholder="Share your experience..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ti ti-send me-1"></i>Submit Review
+                            </button>
+                        </form>
+                    }
+
+                    <!-- Reviews List -->
+                    <hr />
+                    @foreach (var review in ViewBag.Reviews)
+                    {
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="rounded-circle bg-light-primary d-flex align-items-center
+                                    justify-content-center flex-shrink-0"
+                                 style="width:45px; height:45px;">
+                                <i class="ti ti-user text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <p class="fw-semibold mb-0">@review.Student?.Fullname</p>
+                                    <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                </div>
+                                <div class="mb-1">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="ti ti-star-filled text-@(i <= review.Rating ? "warning" : "muted") small"></i>
+                                    }
+                                </div>
+                                <p class="text-muted mb-0">@review.Comment</p>
+                                @if (ViewBag.CurrentUserId == review.StudentId)
+                                {
+                                    <form asp-controller="Review" asp-action="Delete" method="post" class="mt-1">
+                                        <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                        <input type="hidden" name="courseId" value="@Model.CourseId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="ti ti-trash me-1"></i>Delete
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

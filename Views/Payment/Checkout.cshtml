@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var course = ViewBag.Course as SimpleWebsite.Models.Course;
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">Checkout</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Course" asp-action="Index">Courses</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="fw-semibold mb-4">Order Summary</h5>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <img src="@(string.IsNullOrEmpty(course?.Thumbnail) ? "https://via.placeholder.com/80x80?text=C" : course.Thumbnail)"
+                             style="width:80px; height:80px; object-fit:cover; border-radius:8px;" />
+                        <div>
+                            <h6 class="fw-semibold mb-1">@course?.Title</h6>
+                            <p class="text-muted small mb-0">
+                                <i class="ti ti-user me-1"></i>@course?.Instructor?.Fullname
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Coupon Field -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Have a coupon?</label>
+                        <div class="input-group">
+                            <input type="text" id="couponCode" class="form-control text-uppercase"
+                                   placeholder="Enter coupon code" />
+                            <button type="button" class="btn btn-outline-primary" onclick="applyCoupon()">
+                                Apply
+                            </button>
+                        </div>
+                        <div id="couponMessage" class="mt-2 small"></div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Original Price</span>
+                        <span id="originalPrice">$@course?.Price.ToString("0.00")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 d-none" id="discountRow">
+                        <span class="text-success">Discount</span>
+                        <span class="text-success" id="discountAmount">-$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold fs-5">Total</span>
+                        <span class="fw-bold fs-5 text-primary" id="finalPrice">
+                            $@course?.Price.ToString("0.00")
+                        </span>
+                    </div>
+
+                    <form asp-action="CreateCheckoutSession" method="post">
+                        <input type="hidden" name="courseId" value="@course?.CourseId" />
+                        <input type="hidden" name="couponCode" id="appliedCoupon" value="" />
+                        <button type="submit" class="btn btn-primary w-100 py-3">
+                            <i class="ti ti-credit-card me-2"></i>Pay with Stripe
+                        </button>
+                    </form>
+
+                    <p class="text-muted text-center small mt-3">
+                        <i class="ti ti-lock me-1"></i>Secured by Stripe
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var originalPrice = @course?.Price;
+
+        function applyCoupon() {
+            var code = document.getElementById('couponCode').value;
+            if (!code) return;
+
+            fetch('/Coupon/Validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: `code=${code}&originalPrice=${originalPrice}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                var msg = document.getElementById('couponMessage');
+                if (data.success) {
+                    msg.innerHTML = `<span class="text-success"><i class="ti ti-check me-1"></i>${data.message}</span>`;
+                    document.getElementById('discountRow').classList.remove('d-none');
+                    document.getElementById('discountAmount').textContent = `-$${data.discount.toFixed(2)}`;
+                    document.getElementById('finalPrice').textContent = `$${data.newPrice.toFixed(2)}`;
+                    document.getElementById('appliedCoupon').value = code;
+                } else {
+                    msg.innerHTML = `<span class="text-danger"><i class="ti ti-x me-1"></i>${data.message}</span>`;
+                    document.getElementById('discountRow').classList.add('d-none');
+                    document.getElementById('finalPrice').textContent = `$${originalPrice.toFixed(2)}`;
+                    document.getElementById('appliedCoupon').value = '';
+                }
+            });
+        }
+    </script>
+}

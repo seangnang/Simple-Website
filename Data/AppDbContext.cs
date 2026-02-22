@@ -9,5 +9,67 @@ namespace SimpleWebsite.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<LessonProgress> LessonProgresses { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Coupon> Coupons { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Fix cascade delete conflict
+            builder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Enrollments)
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany()
+                .HasForeignKey(e => e.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<LessonProgress>()
+                .HasOne(lp => lp.Enrollment)
+                .WithMany(e => e.LessonProgresses)
+                .HasForeignKey(lp => lp.EnrollmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<LessonProgress>()
+                .HasOne(lp => lp.Lesson)
+                .WithMany(l => l.LessonProgresses)
+                .HasForeignKey(lp => lp.LessonId)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Review>()
+                .HasOne(r => r.Course)
+                .WithMany()
+                .HasForeignKey(r => r.CourseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Review>()
+                .HasOne(r => r.Student)
+                .WithMany()
+                .HasForeignKey(r => r.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.Lesson)
+                .WithMany()
+                .HasForeignKey(c => c.LessonId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

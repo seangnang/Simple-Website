@@ -1,0 +1,382 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@if (User.IsInRole("Admin"))
+{
+    <!-- ── ADMIN DASHBOARD ── -->
+    <div class="container-fluid">
+        <div class="card bg-light-info shadow-none mb-4">
+            <div class="card-body px-4 py-3">
+                <h4 class="fw-semibold mb-1">Admin Dashboard</h4>
+                <p class="text-muted mb-0">Welcome back, @User.Identity.Name</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-primary rounded">
+                            <i class="ti ti-users fs-4 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Users</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalUsers</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-success rounded">
+                            <i class="ti ti-book fs-4 text-success"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Courses</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalCourses</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-warning rounded">
+                            <i class="ti ti-school fs-4 text-warning"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Enrollments</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalEnrollments</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-danger rounded">
+                            <i class="ti ti-category fs-4 text-danger"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Categories</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalCategories</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Recent Users -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-3">
+                            <i class="ti ti-users me-2"></i>Recent Users
+                        </h6>
+                        <div class="list-group list-group-flush">
+                            @foreach (var user in ViewBag.RecentUsers as List<SimpleWebsite.Models.Users>)
+                            {
+                                <div class="list-group-item px-0 d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center"
+                                         style="width:40px; height:40px;">
+                                        <i class="ti ti-user text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold">@user.Fullname</p>
+                                        <small class="text-muted">@user.Email</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Courses -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-3">
+                            <i class="ti ti-book me-2"></i>Recent Courses
+                        </h6>
+                        <div class="list-group list-group-flush">
+                            @foreach (var course in ViewBag.RecentCourses as List<SimpleWebsite.Models.Course>)
+                            {
+                                <div class="list-group-item px-0 d-flex align-items-center gap-3">
+                                    <div class="rounded bg-light-success d-flex align-items-center justify-content-center"
+                                         style="width:40px; height:40px;">
+                                        <i class="ti ti-book text-success"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 fw-semibold">@course.Title</p>
+                                        <small class="text-muted">@course.Instructor?.Fullname</small>
+                                    </div>
+                                    @if (course.IsPublished)
+                                    {
+                                        <span class="badge bg-success">Published</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Draft</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (User.IsInRole("Instructor"))
+{
+    <!-- ── INSTRUCTOR DASHBOARD ── -->
+    <div class="container-fluid">
+        <div class="card bg-light-info shadow-none mb-4">
+            <div class="card-body px-4 py-3">
+                <h4 class="fw-semibold mb-1">Instructor Dashboard</h4>
+                <p class="text-muted mb-0">Welcome back, @User.Identity.Name</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-primary rounded">
+                            <i class="ti ti-book fs-4 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">My Courses</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalCourses</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-success rounded">
+                            <i class="ti ti-users fs-4 text-success"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Students</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalStudents</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-warning rounded">
+                            <i class="ti ti-video fs-4 text-warning"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Total Lessons</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalLessons</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-danger rounded">
+                            <i class="ti ti-eye fs-4 text-danger"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Published</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.PublishedCourses</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Courses Table -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-semibold mb-0">My Courses Overview</h6>
+                    <a asp-controller="Instructor" asp-action="Create" class="btn btn-primary btn-sm">
+                        <i class="ti ti-plus me-1"></i>New Course
+                    </a>
+                </div>
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course</th>
+                            <th>Lessons</th>
+                            <th>Students</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var course in ViewBag.Courses as List<SimpleWebsite.Models.Course>)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@course.Title</td>
+                                <td><span class="badge bg-light-primary text-primary">@course.Lessons.Count</span></td>
+                                <td><span class="badge bg-light-success text-success">@course.Enrollments.Count</span></td>
+                                <td>
+                                    @if (course.IsPublished)
+                                    {
+                                        <span class="badge bg-success">Published</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Draft</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-controller="Instructor" asp-action="Lessons"
+                                       asp-route-courseId="@course.CourseId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="ti ti-list me-1"></i>Lessons
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- ── STUDENT DASHBOARD ── -->
+    <div class="container-fluid">
+        <div class="card bg-light-info shadow-none mb-4">
+            <div class="card-body px-4 py-3">
+                <h4 class="fw-semibold mb-1">My Learning Dashboard</h4>
+                <p class="text-muted mb-0">Welcome back, @User.Identity.Name</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-primary rounded">
+                            <i class="ti ti-book fs-4 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Enrolled</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalEnrolled</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-success rounded">
+                            <i class="ti ti-circle-check fs-4 text-success"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Completed</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalCompleted</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-warning rounded">
+                            <i class="ti ti-player-play fs-4 text-warning"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">In Progress</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.InProgress</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light-danger rounded">
+                            <i class="ti ti-video fs-4 text-danger"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0 small">Lessons Done</p>
+                            <h4 class="fw-bold mb-0">@ViewBag.TotalLessonsCompleted</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrolled Courses -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-semibold mb-0">My Courses</h6>
+                    <a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary btn-sm">
+                        <i class="ti ti-plus me-1"></i>Browse More
+                    </a>
+                </div>
+
+                @if (!(ViewBag.Enrollments as List<SimpleWebsite.Models.Enrollment>).Any())
+                {
+                    <div class="text-center py-4">
+                        <i class="ti ti-book fs-1 text-muted"></i>
+                        <p class="mt-2 text-muted">No courses yet.</p>
+                        <a asp-controller="Course" asp-action="Index" class="btn btn-primary">Browse Courses</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var enrollment in ViewBag.Enrollments as List<SimpleWebsite.Models.Enrollment>)
+                        {
+                            int total = enrollment.Course?.Lessons.Count ?? 0;
+                            int completed = enrollment.LessonProgresses.Count;
+                            int percent = total > 0 ? (completed * 100 / total) : 0;
+
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <div class="card border">
+                                    <img src="@(string.IsNullOrEmpty(enrollment.Course?.Thumbnail) ? "https://placehold.co/400x150?text=Course" : enrollment.Course.Thumbnail)"
+                                         class="card-img-top" style="height:150px; object-fit:cover;" />
+                                    <div class="card-body">
+                                        <h6 class="fw-semibold">@enrollment.Course?.Title</h6>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-muted">Progress</small>
+                                            <small class="fw-semibold">@percent%</small>
+                                        </div>
+                                        <div class="progress mb-3" style="height:6px;">
+                                            <div class="progress-bar bg-primary" style="width:@percent%"></div>
+                                        </div>
+                                        @if (enrollment.IsCompleted)
+                                        {
+                                            <span class="badge bg-success mb-2">
+                                                <i class="ti ti-trophy me-1"></i>Completed!
+                                            </span>
+                                        }
+                                        <a asp-controller="Course" asp-action="Learn"
+                                           asp-route-id="@enrollment.CourseId"
+                                           class="btn btn-primary btn-sm w-100">
+                                            <i class="ti ti-player-play me-1"></i>
+                                            @(percent == 0 ? "Start" : "Continue")
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

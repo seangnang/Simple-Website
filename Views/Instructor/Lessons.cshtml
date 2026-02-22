@@ -1,0 +1,125 @@
+﻿@model SimpleWebsite.Models.Course
+@{
+    ViewData["Title"] = "Manage Lessons";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">Manage Lessons — @Model.Title</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">My Courses</a></li>
+                    <li class="breadcrumb-item active">Lessons</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Lessons List -->
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="p-3 border-bottom">
+                        <h6 class="fw-semibold mb-0">
+                            <i class="ti ti-list me-2"></i>Lessons
+                            <span class="badge bg-light-primary text-primary ms-2">@Model.Lessons.Count</span>
+                        </h6>
+                    </div>
+                    @if (!Model.Lessons.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="ti ti-video-off fs-1 text-muted"></i>
+                            <p class="mt-2 text-muted">No lessons yet. Add your first lesson.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var lesson in Model.Lessons)
+                            {
+                                <div class="list-group-item d-flex align-items-center gap-3">
+                                    <span class="badge bg-primary rounded-circle p-2">@lesson.Order</span>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 fw-semibold">@lesson.Title</p>
+                                        <small class="text-muted">
+                                            <i class="ti ti-clock me-1"></i>@lesson.Duration min
+                                            @if (lesson.IsPreview)
+                                            {
+                                                <span class="badge bg-success ms-2">Free Preview</span>
+                                            }
+                                        </small>
+                                    </div>
+                                    <a asp-action="EditLesson" asp-route-lessonId="@lesson.LessonId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="ti ti-edit"></i>
+                                    </a>
+                                    <form asp-action="DeleteLesson" method="post"
+                                          onsubmit="return confirm('Delete this lesson?')">
+                                        <input type="hidden" name="lessonId" value="@lesson.LessonId" />
+                                        <input type="hidden" name="courseId" value="@Model.CourseId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Lesson Form -->
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3">
+                        <i class="ti ti-plus me-2"></i>Add New Lesson
+                    </h6>
+                    <form asp-action="AddLesson" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="CourseId" value="@Model.CourseId" />
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Lesson Title</label>
+                            <input name="Title" class="form-control" placeholder="e.g. Introduction" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Upload Video</label>
+                            <input type="file" name="videoFile" class="form-control" accept="video/*" />
+                            <small class="text-muted">Upload MP4, MOV or AVI</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Or paste YouTube embed URL</label>
+                            <input name="VideoUrl" class="form-control"
+                                   placeholder="https://www.youtube.com/embed/..." />
+                            <small class="text-muted">Leave empty if uploading video above</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Duration (minutes)</label>
+                            <input name="Duration" type="number" class="form-control" min="1" placeholder="10" />
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input name="IsPreview" type="checkbox" class="form-check-input" value="true" />
+                                <label class="form-check-label fw-semibold">Free Preview</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="ti ti-plus me-1"></i>Add Lesson
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

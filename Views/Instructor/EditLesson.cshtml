@@ -1,0 +1,63 @@
+﻿@model SimpleWebsite.Models.Lesson
+@{
+    ViewData["Title"] = "Edit Lesson";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">Edit Lesson</h4>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="EditLesson" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="LessonId" />
+                        <input type="hidden" asp-for="CourseId" />
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Title</label>
+                            <input asp-for="Title" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Current Video</label>
+                            @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                            {
+                                <p class="text-muted small">@Model.VideoUrl</p>
+                            }
+                            <label class="form-label fw-semibold">Upload New Video</label>
+                            <input type="file" name="videoFile" class="form-control" accept="video/*" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Or YouTube URL</label>
+                            <input asp-for="VideoUrl" class="form-control"
+                                   placeholder="https://www.youtube.com/embed/..." />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Duration (minutes)</label>
+                            <input asp-for="Duration" type="number" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Order</label>
+                            <input asp-for="Order" type="number" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input asp-for="IsPreview" class="form-check-input" />
+                                <label class="form-check-label fw-semibold">Free Preview</label>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a asp-action="Lessons" asp-route-courseId="@Model.CourseId"
+                               class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
