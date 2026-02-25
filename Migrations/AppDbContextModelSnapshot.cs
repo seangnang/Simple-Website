@@ -291,6 +291,39 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("SimpleWebsite.Models.EmailLog", b =>
+                {
+                    b.Property<int>("EmailLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmailLogId"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EmailLogId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmailLogs");
+                });
+
             modelBuilder.Entity("SimpleWebsite.Models.Enrollment", b =>
                 {
                     b.Property<int>("EnrollmentId")
@@ -385,6 +418,39 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("LessonProgresses");
                 });
 
+            modelBuilder.Entity("SimpleWebsite.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("SimpleWebsite.Models.Review", b =>
                 {
                     b.Property<int>("ReviewId")
@@ -464,6 +530,10 @@ namespace SimpleWebsite.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -575,6 +645,17 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("Instructor");
                 });
 
+            modelBuilder.Entity("SimpleWebsite.Models.EmailLog", b =>
+                {
+                    b.HasOne("SimpleWebsite.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SimpleWebsite.Models.Enrollment", b =>
                 {
                     b.HasOne("SimpleWebsite.Models.Course", "Course")
@@ -622,6 +703,17 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("Enrollment");
 
                     b.Navigation("Lesson");
+                });
+
+            modelBuilder.Entity("SimpleWebsite.Models.Notification", b =>
+                {
+                    b.HasOne("SimpleWebsite.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SimpleWebsite.Models.Review", b =>

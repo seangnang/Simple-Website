@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\uploads\courses\" />
+    <Folder Include="wwwroot\uploads\profiles\" />
     <Folder Include="wwwroot\uploads\videos\" />
   </ItemGroup>
 

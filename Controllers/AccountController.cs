@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimpleWebsite.Models;
+using SimpleWebsite.Services;
 using SimpleWebsite.ViewModels;
 
 namespace SimpleWebsite.Controllers
@@ -10,12 +11,14 @@ namespace SimpleWebsite.Controllers
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly NotificationService notificationService;
 
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager , NotificationService notificationService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.notificationService = notificationService;
         }
 
         public IActionResult Index() => View();
@@ -47,9 +50,8 @@ namespace SimpleWebsite.Controllers
             return View(model);
         }
 
-        // ── Register ─────────────────────────────────────────────
+        // GET
         public IActionResult Register() => View();
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -61,14 +63,24 @@ namespace SimpleWebsite.Controllers
                     Email = model.Email,
                     UserName = model.Email,
                 };
-
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Student");
+
+                    // ← Notify Admin here inside Succeeded block
+                    var adminUsers = await userManager.GetUsersInRoleAsync("Admin");
+                    foreach (var admin in adminUsers)
+                    {
+                        await notificationService.SendAsync(
+                            admin.Id,
+                            $"New user registered: {model.Name} ({model.Email})",
+                            "/Admin/Index"
+                        );
+                    }
+
                     return RedirectToAction("Login", "Account");
                 }
-
                 foreach (var error in result.Errors)
                     ModelState.AddModelError("", error.Description);
             }

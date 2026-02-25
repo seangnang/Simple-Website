@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
 using SimpleWebsite.Models;
+using SimpleWebsite.Services;
 
 namespace SimpleWebsite.Controllers
 {
@@ -12,11 +13,13 @@ namespace SimpleWebsite.Controllers
     {
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
+        private readonly NotificationService notificationService;
 
-        public InstructorController(AppDbContext context, UserManager<Users> userManager)
+        public InstructorController(AppDbContext context, UserManager<Users> userManager, NotificationService notificationService)
         {
             this.context = context;
             this.userManager = userManager;
+            this.notificationService = notificationService;
         }
 
         // ── My Courses ────────────────────────────────────────────
@@ -63,6 +66,18 @@ namespace SimpleWebsite.Controllers
 
                 context.Courses.Add(model);
                 await context.SaveChangesAsync();
+
+                // ← Notify Admin here
+                var adminUsers = await userManager.GetUsersInRoleAsync("Admin");
+                foreach (var admin in adminUsers)
+                {
+                    await notificationService.SendAsync(
+                        admin.Id,
+                        $"New course created: '{model.Title}' by {User.Identity?.Name}",
+                        "/Admin/Courses"
+                    );
+                }
+
                 TempData["Success"] = "Course created successfully!";
                 return RedirectToAction("Index");
             }

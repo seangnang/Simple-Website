@@ -1,0 +1,76 @@
+﻿@model IEnumerable<SimpleWebsite.Models.EmailLog>
+@{
+    ViewData["Title"] = "My Inbox";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card bg-light-info shadow-none mb-4">
+        <div class="card-body px-4 py-3">
+            <h4 class="fw-semibold mb-1">
+                <i class="ti ti-mail me-2"></i>My Inbox
+            </h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active">Email</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="ti ti-mail-off fs-1 text-muted"></i>
+                    <p class="mt-2 text-muted">Your inbox is empty.</p>
+                </div>
+            }
+            else
+            {
+                <div class="list-group list-group-flush">
+                    @foreach (var email in Model)
+                    {
+                        <div class="list-group-item d-flex align-items-center gap-3 p-3
+                                            @(!email.IsRead ? "bg-light-primary" : "")">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0
+                                                @(!email.IsRead ? "bg-primary" : "bg-light-secondary")"
+                                 style="width:45px; height:45px;">
+                                <i class="ti ti-mail @(!email.IsRead ? "text-white" : "text-muted")"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="fw-semibold mb-0 @(!email.IsRead ? "text-primary" : "")">
+                                    @email.Subject
+                                </p>
+                                <small class="text-muted">
+                                    <i class="ti ti-clock me-1"></i>
+                                    @email.SentAt.ToString("MMM dd, yyyy hh:mm tt")
+                                </small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                @if (!email.IsRead)
+                                {
+                                    <span class="badge bg-primary">New</span>
+                                }
+                                <a asp-action="Read" asp-route-id="@email.EmailLogId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="ti ti-eye me-1"></i>View
+                                </a>
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@email.EmailLogId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

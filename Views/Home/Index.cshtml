@@ -593,5 +593,12 @@
             }
         });
     </script>
+    <script>
+        // Apply dark mode on landing page too
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.style.backgroundColor = '#1a1a2e';
+            document.body.style.color = '#e0e0e0';
+        }
+    </script>
 </body>
 </html>

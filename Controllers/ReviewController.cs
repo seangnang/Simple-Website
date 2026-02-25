@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
 using SimpleWebsite.Models;
+using SimpleWebsite.Services;
 
 namespace SimpleWebsite.Controllers
 {
@@ -12,11 +13,13 @@ namespace SimpleWebsite.Controllers
     {
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
+        private readonly NotificationService notificationService;
 
-        public ReviewController(AppDbContext context, UserManager<Users> userManager)
+        public ReviewController(AppDbContext context, UserManager<Users> userManager, NotificationService notificationService)
         {
             this.context = context;
             this.userManager = userManager;
+            this.notificationService = notificationService;
         }
 
         [HttpPost]
@@ -25,7 +28,6 @@ namespace SimpleWebsite.Controllers
         {
             var userId = userManager.GetUserId(User);
 
-            // Check if student is enrolled
             var enrolled = await context.Enrollments
                 .AnyAsync(e => e.StudentId == userId && e.CourseId == courseId);
 
@@ -35,7 +37,6 @@ namespace SimpleWebsite.Controllers
                 return RedirectToAction("Details", "Course", new { id = courseId });
             }
 
-            // Check if already reviewed
             var alreadyReviewed = await context.Reviews
                 .AnyAsync(r => r.StudentId == userId && r.CourseId == courseId);
 
@@ -56,6 +57,18 @@ namespace SimpleWebsite.Controllers
 
             context.Reviews.Add(review);
             await context.SaveChangesAsync();
+
+            // Notify Instructor
+            var course = await context.Courses.FindAsync(courseId);
+            var student = await userManager.FindByIdAsync(userId!);
+            if (course?.InstructorId != null)
+            {
+                await notificationService.SendAsync(
+                    course.InstructorId,
+                    $"{student?.Fullname} rated your course '{course.Title}' {rating} ⭐",
+                    $"/Course/Details/{courseId}"
+                );
+            }
 
             TempData["Success"] = "Review submitted successfully!";
             return RedirectToAction("Details", "Course", new { id = courseId });

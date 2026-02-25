@@ -1,4 +1,9 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SimpleWebsite.Models.Users> SignInManager
+@inject UserManager<SimpleWebsite.Models.Users> UserManager
+@{
+    var navUser = await UserManager.GetUserAsync(User);
+}
 <!doctype html>
 <html lang="en">
 
@@ -8,6 +13,7 @@
     <title>Dashboard</title>
     <link rel="shortcut icon" type="image/png" href="~/backend/assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="~/backend/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/backend/assets/js/sidebarmenu.js"></script>
     <style>
         .page-wrapper {
@@ -85,6 +91,21 @@
                                 </a>
                             </li>
                         }
+                        <li class="nav-small-cap">
+                            <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
+                            <span class="hide-menu">Courses Management</span>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" asp-controller="Admin" asp-action="Courses">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="d-flex"><i class="ti ti-book"></i></span>
+                                        <span class="hide-menu">Course Management</span>
+                                    </div>
+                                </a>
+                            </li>
+                        }
 
                         @if (User.IsInRole("Instructor"))
                         {
@@ -142,32 +163,25 @@
                                 </div>
                             </a>
                         </li>
-                            
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between"
-                               href="#" aria-expanded="false">
+                            <a class="sidebar-link" asp-controller="Email" asp-action="Index">
                                 <div class="d-flex align-items-center gap-3">
-                                    <span class="d-flex">
-                                        <i class="ti ti-mail"></i>
-                                    </span>
+                                    <span class="d-flex"><i class="ti ti-mail"></i></span>
                                     <span class="hide-menu">Email</span>
                                 </div>
-
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between"
-                               href="#" aria-expanded="false">
+                               class="sidebar-link" asp-controller="Home" asp-action="Calender" aria-expanded="false">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">
                                         <i class="ti ti-calendar"></i>
                                     </span>
                                     <span class="hide-menu">Calendar</span>
                                 </div>
-
                             </a>
                         </li>
-                        
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -179,55 +193,160 @@
         <div class="body-wrapper">
             <header class="app-header">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <ul class="navbar-nav w-100">
+                    <ul class="navbar-nav w-100 d-flex align-items-center">
 
+                        <!-- Hamburger -->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">☰</a>
+                            <a class="nav-link sidebartoggler" href="javascript:void(0)">
+                                <i class="ti ti-menu-2 fs-5"></i>
+                            </a>
                         </li>
 
-                        <li class="nav-item dropdown ms-auto">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">🔔</a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Item 1</a></li>
-                                <li><a class="dropdown-item" href="#">Item 2</a></li>
-                                <li><a class="dropdown-item" href="#">Item 3</a></li>
-                            </ul>
-                        </li>
+                        <!-- Right Side Items -->
+                        <li class="nav-item ms-auto d-flex align-items-center gap-3">
 
-                    </ul>
-                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                            <!-- Dark Mode Toggle -->
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ti ti-sun text-warning"></i>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" id="darkModeToggle"
+                                           style="width:40px; height:20px; cursor:pointer;" />
+                                </div>
+                                <i class="ti ti-moon text-primary"></i>
+                            </div>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                                   aria-expanded="false">
-                                    <img src="~/backend/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                            <!-- Bell Notification -->
+                            @inject SimpleWebsite.Services.NotificationService NotificationService
+                            @{
+                                var currentUserId = UserManager.GetUserId(User);
+                                var unreadCount = await NotificationService.GetUnreadCountAsync(currentUserId!);
+                                var recentNotifications = await NotificationService.GetUserNotificationsAsync(currentUserId!);
+                            }
+                            <div class="dropdown">
+                                <a class="nav-link position-relative" href="#" data-bs-toggle="dropdown">
+                                    <i class="ti ti-bell fs-5"></i>
+                                    @if (unreadCount > 0)
+                                    {
+                                        <span class="position-absolute badge rounded-pill bg-danger"
+                                              style="font-size:0.6rem; top:-2px; right:-6px; min-width:18px;">
+                                            @unreadCount
+                                        </span>
+                                    }
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                                    <div class="message-body">
-                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3">My Profile</p>
+                                <div class="dropdown-menu dropdown-menu-end p-0" style="width:320px;">
+                                    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                        <h6 class="fw-semibold mb-0">Notifications</h6>
+                                        @if (unreadCount > 0)
+                                        {
+                                            <span class="badge bg-danger">@unreadCount new</span>
+                                        }
+                                    </div>
+                                    <div style="max-height:300px; overflow-y:auto;">
+                                        @if (!recentNotifications.Any())
+                                        {
+                                            <div class="text-center py-4">
+                                                <i class="ti ti-bell-off text-muted fs-3"></i>
+                                                <p class="text-muted small mt-2">No notifications</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var notif in recentNotifications.Take(5))
+                                            {
+                                                <a href="@(string.IsNullOrEmpty(notif.Link) ? "#" : notif.Link)"
+                                                   class="d-flex align-items-start gap-3 p-3 border-bottom text-decoration-none
+                                                          @(!notif.IsRead ? "bg-light" : "")">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0
+                                                                @(!notif.IsRead ? "bg-primary" : "bg-light-secondary")"
+                                                         style="width:35px; height:35px;">
+                                                        <i class="ti ti-bell @(!notif.IsRead ? "text-white" : "text-muted") small"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-0 small @(!notif.IsRead ? "fw-semibold text-dark" : "text-muted")">
+                                                            @notif.Message
+                                                        </p>
+                                                        <small class="text-muted">
+                                                            @notif.CreatedAt.ToString("MMM dd, hh:mm tt")
+                                                        </small>
+                                                    </div>
+                                                </a>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="p-2 text-center border-top">
+                                        <a asp-controller="Notification" asp-action="Index"
+                                           class="btn btn-sm btn-outline-primary w-100">
+                                            View All Notifications
                                         </a>
-                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-mail fs-6"></i>
-                                            <p class="mb-0 fs-3">My Account</p>
-                                        </a>
-                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-list-check fs-6"></i>
-                                            <p class="mb-0 fs-3">My Task</p>
-                                        </a>
-                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+
+                            <!-- User Avatar Dropdown -->
+                            <div class="dropdown">
+                                <a class="nav-link" href="javascript:void(0)" data-bs-toggle="dropdown">
+                                    @if (!string.IsNullOrEmpty(navUser?.ProfilePicture))
+                                    {
+                                        <img src="@navUser.ProfilePicture" alt="Profile"
+                                             width="35" height="35"
+                                             class="rounded-circle"
+                                             style="object-fit:cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded-circle bg-light-primary d-inline-flex align-items-center
+                                                justify-content-center"
+                                             style="width:35px; height:35px;">
+                                            <i class="ti ti-user text-primary"></i>
+                                        </div>
+                                    }
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end p-0" style="min-width:220px;">
+                                    <div class="d-flex align-items-center gap-3 px-3 py-3 border-bottom">
+                                        @if (!string.IsNullOrEmpty(navUser?.ProfilePicture))
+                                        {
+                                            <img src="@navUser.ProfilePicture" width="45" height="45"
+                                                 class="rounded-circle" style="object-fit:cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="rounded-circle bg-light-primary d-inline-flex align-items-center
+                                                    justify-content-center"
+                                                 style="width:45px; height:45px;">
+                                                <i class="ti ti-user text-primary fs-4"></i>
+                                            </div>
+                                        }
+                                        <div>
+                                            <p class="fw-semibold mb-0">@navUser?.Fullname</p>
+                                            <small class="text-muted">@navUser?.Email</small>
+                                        </div>
+                                    </div>
+                                    <a asp-controller="Profile" asp-action="Index"
+                                       class="d-flex align-items-center gap-2 dropdown-item py-2">
+                                        <i class="ti ti-user fs-6"></i>
+                                        <p class="mb-0 fs-3">My Profile</p>
+                                    </a>
+                                    <a asp-controller="Dashboard" asp-action="Index"
+                                       class="d-flex align-items-center gap-2 dropdown-item py-2">
+                                        <i class="ti ti-layout-dashboard fs-6"></i>
+                                        <p class="mb-0 fs-3">Dashboard</p>
+                                    </a>
+                                    <div class="px-3 py-2">
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            <button type="submit" class="btn btn-outline-danger w-100 btn-sm">
+                                                <i class="ti ti-logout me-1"></i>Logout
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
                 </nav>
             </header>
-			@RenderBody()
+            @RenderBody()
         </div>
-    </div>
     <script src="~/backend/assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/backend/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/backend/assets/js/sidebarmenu.js"></script>
@@ -238,6 +357,54 @@
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Dark Mode
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const body = document.body;
+
+        // Load saved preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark-mode');
+            darkModeIcon.classList.remove('ti-moon');
+            darkModeIcon.classList.add('ti-sun');
+        }
+
+        darkModeToggle.addEventListener('click', function () {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+
+            if (isDark) {
+                darkModeIcon.classList.remove('ti-moon');
+                darkModeIcon.classList.add('ti-sun');
+            } else {
+                darkModeIcon.classList.remove('ti-sun');
+                darkModeIcon.classList.add('ti-moon');
+            }
+        });
+    </script>
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Load saved preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark-mode');
+            toggle.checked = true;
+        }
+
+        toggle.addEventListener('change', function () {
+            if (this.checked) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+    </script>
 </body>
 
 </html>

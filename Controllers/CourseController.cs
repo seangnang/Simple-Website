@@ -13,12 +13,14 @@ namespace SimpleWebsite.Controllers
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
         private readonly EmailService emailService;
+        private readonly NotificationService notificationService;
 
-        public CourseController(AppDbContext context, UserManager<Users> userManager, EmailService emailService)
+        public CourseController(AppDbContext context, UserManager<Users> userManager, EmailService emailService, NotificationService notificationService)
         {
             this.context = context;
             this.userManager = userManager;
             this.emailService = emailService;
+            this.notificationService = notificationService;
         }
 
         // ── Browse All Courses (Public) ───────────────────────────
@@ -96,25 +98,76 @@ namespace SimpleWebsite.Controllers
         public async Task<IActionResult> Enroll(int courseId)
         {
             var userId = userManager.GetUserId(User);
-
             var alreadyEnrolled = await context.Enrollments
                 .AnyAsync(e => e.StudentId == userId && e.CourseId == courseId);
-
             if (alreadyEnrolled)
             {
                 TempData["Error"] = "You are already enrolled in this course.";
                 return RedirectToAction("Details", new { id = courseId });
             }
-
             var enrollment = new Enrollment
             {
                 StudentId = userId!,
                 CourseId = courseId,
                 EnrolledAt = DateTime.UtcNow
             };
-
             context.Enrollments.Add(enrollment);
             await context.SaveChangesAsync();
+
+            // Load course with instructor and student
+            var course = await context.Courses
+                .Include(c => c.Instructor)
+                .FirstOrDefaultAsync(c => c.CourseId == courseId);
+            var student = await userManager.FindByIdAsync(userId!);
+
+            // Send invoice email
+            try
+            {
+                if (student?.Email != null && course != null)
+                {
+                    await emailService.SendInvoiceAsync(
+                        student.Email,
+                        student.Fullname,
+                        course.Title,
+                        course.Price,
+                        course.Instructor?.Fullname ?? "Instructor",
+                        enrollment.EnrollmentId,
+                        student.Id
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Email error: {ex.Message}");
+            }
+
+            // Notify student
+            await notificationService.SendAsync(
+                userId!,
+                $"You have successfully enrolled in {course?.Title}!",
+                $"/Course/Learn/{courseId}"
+            );
+
+            // Notify instructor
+            if (course?.InstructorId != null)
+            {
+                await notificationService.SendAsync(
+                    course.InstructorId,
+                    $"{student?.Fullname} enrolled in your course '{course.Title}'",
+                    "/Instructor/Index"
+                );
+            }
+
+            // Notify Admin
+            var adminUsers = await userManager.GetUsersInRoleAsync("Admin");
+            foreach (var admin in adminUsers)
+            {
+                await notificationService.SendAsync(
+                    admin.Id,
+                    $"{student?.Fullname} enrolled in '{course?.Title}'",
+                    "/Admin/Courses"
+                );
+            }
 
             TempData["Success"] = "Successfully enrolled!";
             return RedirectToAction("Learn", new { id = courseId });

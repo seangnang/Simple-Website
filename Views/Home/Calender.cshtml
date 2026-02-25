@@ -1,0 +1,82 @@
+﻿@{
+    // ViewData["Calender"] = Model.Title;
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    int month = DateTime.Today.Month;
+    int year = DateTime.Today.Year;
+
+    if (int.TryParse(Context.Request.Query["month"], out int m)) month = m;
+    if (int.TryParse(Context.Request.Query["year"], out int y)) year = y;
+
+    var first = new DateTime(year, month, 1);
+    int days = DateTime.DaysInMonth(year, month);
+    int offset = ((int)first.DayOfWeek + 6) % 7;
+    var prev = first.AddMonths(-1);
+    var next = first.AddMonths(1);
+    var today = DateTime.Today;
+}
+
+<div class="container-fluid p-4 ">
+    <div style="border-radius:10px;overflow:hidden;box-shadow:0 2px 15px rgba(0,0,0,0.1);">
+
+        <!-- Header -->
+        <div style="display:flex;justify-content:space-between;align-items:center;
+                    background:#4f46e5;color:white;padding:70px 30px;">
+            <a href="?month=@prev.Month&year=@prev.Year"
+               style="color:white;text-decoration:none;font-size:28px;line-height:1;">&#8249;</a>
+            <strong style="font-size:22px;">@first.ToString("MMMM yyyy")</strong>
+            <a href="?month=@next.Month&year=@next.Year"
+               style="color:white;text-decoration:none;font-size:28px;line-height:1;">&#8250;</a>
+        </div>
+
+        <!-- Grid -->
+        <table style="width:100%;border-collapse:collapse;background:white;">
+            <tr>
+                @foreach (var d in new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" })
+                {
+                    <th style="padding:16px 0;text-align:center;font-size:14px;border-bottom:1px solid #e5e7eb;
+                                   color:@(d is "Saturday" or "Sunday" ? "#ef4444" : "#6b7280");">@d</th>
+                }
+            </tr>
+            @{
+                int day = 1;
+                int rows = (int)Math.Ceiling((offset + days) / 7.0);
+            }
+            @for (int r = 0; r < rows; r++)
+            {
+                <tr>
+                    @for (int c = 0; c < 7; c++)
+                    {
+                        int cell = r * 7 + c;
+                        if (cell < offset || day > days)
+                        {
+                            <td style="height:110px;border:1px solid #f3f4f6;background:#fafafa;"></td>
+                        }
+                        else
+                        {
+                            bool isToday = day == today.Day && month == today.Month && year == today.Year;
+                            bool isWeekend = c == 5 || c == 6;
+                            <td style="height:110px;border:1px solid #f3f4f6;padding:10px;vertical-align:top;
+                                                   background:@(isWeekend && !isToday ? "#fef9f9" : "white");">
+                                <span style="display:inline-flex;align-items:center;justify-content:center;
+                                                         width:38px;height:38px;border-radius:50%;
+                                                         background:@(isToday ? "#4f46e5" : "transparent");
+                                                         color:@(isToday ? "white" : isWeekend ? "#ef4444" : "#111827");
+                                                         font-weight:@(isToday ? "bold" : "normal");font-size:16px;">
+                                    @day
+                                </span>
+                            </td>
+                            day++;
+                        }
+                    }
+                </tr>
+            }
+        </table>
+
+        <!-- Footer -->
+        <div style="text-align:center;padding:14px;background:white;border-top:1px solid #e5e7eb;">
+            <a href="?month=@today.Month&year=@today.Year"
+               style="font-size:14px;color:#4f46e5;text-decoration:none;font-weight:500;">Today</a>
+        </div>
+
+    </div>
+</div>

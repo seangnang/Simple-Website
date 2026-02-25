@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
 using SimpleWebsite.Models;
+using SimpleWebsite.Services;
 
 namespace SimpleWebsite.Controllers
 {
@@ -12,11 +13,13 @@ namespace SimpleWebsite.Controllers
     {
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
+        private readonly NotificationService notificationService;
 
-        public CommentController(AppDbContext context, UserManager<Users> userManager)
+        public CommentController(AppDbContext context, UserManager<Users> userManager, NotificationService notificationService)
         {
             this.context = context;
             this.userManager = userManager;
+            this.notificationService = notificationService;
         }
 
         [HttpPost]
@@ -35,6 +38,18 @@ namespace SimpleWebsite.Controllers
 
             context.Comments.Add(comment);
             await context.SaveChangesAsync();
+
+            // Notify Instructor
+            var course = await context.Courses.FindAsync(courseId);
+            var student = await userManager.FindByIdAsync(userId!);
+            if (course?.InstructorId != null)
+            {
+                await notificationService.SendAsync(
+                    course.InstructorId,
+                    $"{student?.Fullname} commented on your course '{course.Title}'",
+                    $"/Instructor/Lessons?courseId={courseId}"
+                );
+            }
 
             TempData["Success"] = "Comment added!";
             return RedirectToAction("Learn", "Course", new { id = courseId, lessonId });

@@ -43,5 +43,7 @@ namespace SimpleWebsite.Controllers
 
             return View();
         }
+
+        public IActionResult Calender() => View();
     }
 }

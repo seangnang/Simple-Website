@@ -37,12 +37,35 @@
         <div class="col-lg-6 mb-4">
             <div class="card h-100">
                 <div class="card-body">
+
+                    <!-- Profile Picture -->
                     <div class="text-center mb-4">
-                        <div class="rounded-circle bg-light-primary d-inline-flex align-items-center
-                                    justify-content-center mb-3"
-                             style="width:80px; height:80px;">
-                            <i class="ti ti-user fs-1 text-primary"></i>
+                        @if (!string.IsNullOrEmpty(ViewBag.ProfilePicture as string))
+                        {
+                            <img src="@ViewBag.ProfilePicture"
+                                 class="rounded-circle mb-3"
+                                 style="width:100px; height:100px; object-fit:cover;
+                                            border:3px solid #4f46e5;" />
+                        }
+                        else
+                        {
+                            <div class="rounded-circle bg-light-primary d-inline-flex
+                                            align-items-center justify-content-center mb-3"
+                                 style="width:100px; height:100px; border:3px solid #4f46e5;">
+                                <i class="ti ti-user fs-1 text-primary"></i>
+                            </div>
+                        }
+
+                        <div class="mb-2">
+                            <form asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+                                <label class="btn btn-outline-primary btn-sm">
+                                    <i class="ti ti-camera me-1"></i>Change Photo
+                                    <input type="file" name="pictureFile" accept="image/*"
+                                           style="display:none;" onchange="this.form.submit()" />
+                                </label>
+                            </form>
                         </div>
+
                         <h5 class="fw-semibold">@User.Identity?.Name</h5>
                         <span class="badge bg-primary">
                             @if (User.IsInRole("Admin"))

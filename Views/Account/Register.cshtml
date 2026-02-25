@@ -1,4 +1,4 @@
-@using SimpleWebsite.ViewModels;
+﻿@using SimpleWebsite.ViewModels;
 @model RegisterViewModel;
 @{
 	ViewData["Title"] = "Register";
@@ -29,7 +29,7 @@
 				<input asp-for="ComfirmPassword" class="form-control" />
 				<span asp-validation-for="ComfirmPassword" class="text-danger"></span>
 			</div>
-			
+
 			<input type="submit" value="Register" class="btn btn-success w-100 p2" />
 			<p class="text-center mt-2">
 				Already have an account ? <a asp-controller="Account" asp-action="Login" class="text-decoration-none">Login</a>

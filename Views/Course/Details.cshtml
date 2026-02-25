@@ -30,9 +30,38 @@
                      class="card-img-top" style="height:300px; object-fit:cover;" />
                 <div class="card-body">
                     <h4 class="fw-semibold">@Model.Title</h4>
-                    <p class="text-muted">
-                        <i class="ti ti-user me-1"></i>Instructor: <strong>@Model.Instructor?.Fullname</strong>
-                    </p>
+
+                    <!-- Instructor Info with Picture -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        @if (!string.IsNullOrEmpty(Model.Instructor?.ProfilePicture))
+                        {
+                            <img src="@Model.Instructor.ProfilePicture"
+                                 class="rounded-circle"
+                                 style="width:50px; height:50px; object-fit:cover; border:2px solid #4f46e5;" />
+                        }
+                        else
+                        {
+                            <div class="rounded-circle bg-light-primary d-flex align-items-center
+                                            justify-content-center flex-shrink-0"
+                                 style="width:50px; height:50px;">
+                                <i class="ti ti-user text-primary fs-4"></i>
+                            </div>
+                        }
+                        <div>
+                            <p class="fw-semibold mb-0">@Model.Instructor?.Fullname</p>
+                            <small class="text-muted">
+                                <i class="ti ti-award me-1"></i>Instructor
+                            </small>
+                        </div>
+                    </div>
+
+                    @if (Model.Category != null)
+                    {
+                        <span class="badge bg-light-primary text-primary mb-2">
+                            <i class="@Model.Category.Icon me-1"></i>@Model.Category.Name
+                        </span>
+                    }
+
                     <hr />
                     <h6 class="fw-semibold">About this course</h6>
                     <p>@Model.Description</p>
@@ -69,7 +98,7 @@
                                     {
                                         <a asp-controller="Course" asp-action="Preview"
                                            asp-route-lessonId="@lesson.LessonId"
-                                           class="badge bg-success text-white">
+                                           class="badge bg-success text-white text-decoration-none">
                                             Free Preview
                                         </a>
                                     }
@@ -127,12 +156,29 @@
                             <i class="ti ti-login me-2"></i>Login to Enroll
                         </a>
                     }
+
+                    <hr />
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-2">
+                            <i class="ti ti-video me-2 text-primary"></i>@Model.Lessons.Count Video Lessons
+                        </li>
+                        <li class="mb-2">
+                            <i class="ti ti-clock me-2 text-primary"></i>
+                            @Model.Lessons.Sum(l => l.Duration) mins total
+                        </li>
+                        <li class="mb-2">
+                            <i class="ti ti-certificate me-2 text-primary"></i>Certificate on completion
+                        </li>
+                        <li class="mb-2">
+                            <i class="ti ti-infinity me-2 text-primary"></i>Lifetime access
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+
         <!-- Reviews Section -->
         <div class="col-lg-8 mt-4">
-            <!-- Average Rating -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3">
@@ -189,11 +235,20 @@
                     @foreach (var review in ViewBag.Reviews)
                     {
                         <div class="d-flex gap-3 mb-3">
-                            <div class="rounded-circle bg-light-primary d-flex align-items-center
-                                    justify-content-center flex-shrink-0"
-                                 style="width:45px; height:45px;">
-                                <i class="ti ti-user text-primary"></i>
-                            </div>
+                            @if (!string.IsNullOrEmpty(review.Student?.ProfilePicture))
+                            {
+                                <img src="@review.Student.ProfilePicture"
+                                     class="rounded-circle flex-shrink-0"
+                                     style="width:45px; height:45px; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle bg-light-primary d-flex align-items-center
+                                                    justify-content-center flex-shrink-0"
+                                     style="width:45px; height:45px;">
+                                    <i class="ti ti-user text-primary"></i>
+                                </div>
+                            }
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-semibold mb-0">@review.Student?.Fullname</p>
