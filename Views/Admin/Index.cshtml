@@ -7,13 +7,28 @@
 <div class="container-fluid">
     <div class="card bg-light-info shadow-none mb-4">
         <div class="card-body px-4 py-3">
-            <h4 class="fw-semibold mb-1">User Management</h4>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Users</li>
-                </ol>
-            </nav>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="fw-semibold mb-1">User Management</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active">Users</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary px-3 py-2 fs-6">
+                        @Model.Count() Users
+                    </span>
+                    <button class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#createUserModal">
+                        <i class="ti ti-user-plus me-2"></i>Create User
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -24,17 +39,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
     <div class="card">
         <div class="card-body p-0">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>Profile</th>
-                        <th>Email</th>
+                        <th>User</th>
                         <th>Name</th>
                         <th>Current Role</th>
                         <th>Assign Role</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +64,7 @@
                     {
                         var roles = ViewBag.UserRoles[user.Id] as IList<string>;
                         <tr>
+                            <!-- User with avatar + email -->
                             <td>
                                 <div class="d-flex align-items-center gap-3">
                                     @if (!string.IsNullOrEmpty(user.ProfilePicture))
@@ -53,26 +76,31 @@
                                     else
                                     {
                                         <div class="rounded-circle bg-light-primary d-flex align-items-center
-                                justify-content-center flex-shrink-0"
+                                                            justify-content-center flex-shrink-0"
                                              style="width:40px; height:40px;">
                                             <i class="ti ti-user text-primary"></i>
                                         </div>
                                     }
                                     <div>
                                         <p class="fw-semibold mb-0 small">@user.Email</p>
+                                        <small class="text-muted">
+                                            @(user.EmailConfirmed ? "✅ Verified" : "⏳ Unverified")
+                                        </small>
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle">@user.Email</td>
 
-                            <td class="align-middle">@user.Fullname</td>
-                            <td>
+                            <!-- Name -->
+                            <td class="align-middle fw-semibold">@user.Fullname</td>
+
+                            <!-- Current Role -->
+                            <td class="align-middle">
                                 @if (roles != null && roles.Any())
                                 {
                                     foreach (var role in roles)
                                     {
                                         <span class="badge @(role == "Admin" ? "bg-danger" : role == "Instructor" ? "bg-warning text-dark" : "bg-success")">
-                                            @role
+                                            @(role == "Admin" ? "👑 Admin" : role == "Instructor" ? "👨‍🏫 Instructor" : "🎓 Student")
                                         </span>
                                     }
                                 }
@@ -81,9 +109,10 @@
                                     <span class="badge bg-secondary">No Role</span>
                                 }
                             </td>
-                            <td>
+
+                            <!-- Assign Role -->
+                            <td class="align-middle">
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <!-- Assign Admin -->
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Admin" />
@@ -91,8 +120,6 @@
                                             <i class="ti ti-shield me-1"></i>Admin
                                         </button>
                                     </form>
-
-                                    <!-- Assign Instructor -->
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Instructor" />
@@ -100,8 +127,6 @@
                                             <i class="ti ti-chalkboard me-1"></i>Instructor
                                         </button>
                                     </form>
-
-                                    <!-- Assign Student -->
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Student" />
@@ -109,8 +134,6 @@
                                             <i class="ti ti-school me-1"></i>Student
                                         </button>
                                     </form>
-
-                                    <!-- Remove Role -->
                                     @if (roles != null && roles.Any())
                                     {
                                         <form asp-action="RemoveRole" method="post" style="display:inline">
@@ -123,10 +146,87 @@
                                     }
                                 </div>
                             </td>
+
+                            <!-- Delete -->
+                            <td class="align-middle">
+                                <form asp-action="DeleteUser" method="post"
+                                      onsubmit="return confirm('Delete @user.Fullname? This cannot be undone!')">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Create User Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-semibold">
+                    <i class="ti ti-user-plus me-2 text-primary"></i>Create New User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-controller="Admin" asp-action="CreateUser" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="ti ti-user"></i>
+                            </span>
+                            <input type="text" name="fullname" class="form-control"
+                                   placeholder="Enter full name" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="ti ti-mail"></i>
+                            </span>
+                            <input type="email" name="email" class="form-control"
+                                   placeholder="Enter email address" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="ti ti-lock"></i>
+                            </span>
+                            <input type="password" name="password" class="form-control"
+                                   placeholder="Min 8 characters" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Assign Role</label>
+                        <select name="role" class="form-select" required>
+                            <option value="">-- Select Role --</option>
+                            <option value="Admin">👑 Admin</option>
+                            <option value="Instructor">👨‍🏫 Instructor</option>
+                            <option value="Student">🎓 Student</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        <i class="ti ti-x me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-user-plus me-1"></i>Create User
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

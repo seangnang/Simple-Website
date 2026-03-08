@@ -107,5 +107,43 @@ namespace SimpleWebsite.Controllers
             TempData["Success"] = "Course deleted!";
             return RedirectToAction("Courses");
         }
+
+
+        //create user and assign role
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(string fullname, string email,
+    string password, string role)
+        {
+            var existingUser = await userManager.FindByEmailAsync(email);
+            if (existingUser != null)
+            {
+                TempData["Error"] = "Email already exists!";
+                return RedirectToAction("Index");
+            }
+
+            var user = new Users
+            {
+                Fullname = fullname,
+                Email = email,
+                UserName = email
+            };
+
+            var result = await userManager.CreateAsync(user, password);
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(role))
+                    await userManager.AddToRoleAsync(user, role);
+
+                TempData["Success"] = $"User '{fullname}' created as {role} successfully!";
+            }
+            else
+            {
+                TempData["Error"] = string.Join(", ", result.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
