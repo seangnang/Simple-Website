@@ -13,14 +13,22 @@ namespace SimpleWebsite.Controllers
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
         private readonly EmailService emailService;
+<<<<<<< HEAD
         private readonly NotificationService notificationService;
 
         public CourseController(AppDbContext context, UserManager<Users> userManager, EmailService emailService, NotificationService notificationService)
+=======
+
+        public CourseController(AppDbContext context, UserManager<Users> userManager, EmailService emailService)
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         {
             this.context = context;
             this.userManager = userManager;
             this.emailService = emailService;
+<<<<<<< HEAD
             this.notificationService = notificationService;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         }
 
         // ── Browse All Courses (Public) ───────────────────────────
@@ -98,19 +106,31 @@ namespace SimpleWebsite.Controllers
         public async Task<IActionResult> Enroll(int courseId)
         {
             var userId = userManager.GetUserId(User);
+<<<<<<< HEAD
             var alreadyEnrolled = await context.Enrollments
                 .AnyAsync(e => e.StudentId == userId && e.CourseId == courseId);
+=======
+
+            var alreadyEnrolled = await context.Enrollments
+                .AnyAsync(e => e.StudentId == userId && e.CourseId == courseId);
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             if (alreadyEnrolled)
             {
                 TempData["Error"] = "You are already enrolled in this course.";
                 return RedirectToAction("Details", new { id = courseId });
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             var enrollment = new Enrollment
             {
                 StudentId = userId!,
                 CourseId = courseId,
                 EnrolledAt = DateTime.UtcNow
             };
+<<<<<<< HEAD
             context.Enrollments.Add(enrollment);
             await context.SaveChangesAsync();
 
@@ -169,6 +189,12 @@ namespace SimpleWebsite.Controllers
                 );
             }
 
+=======
+
+            context.Enrollments.Add(enrollment);
+            await context.SaveChangesAsync();
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             TempData["Success"] = "Successfully enrolled!";
             return RedirectToAction("Learn", new { id = courseId });
         }

@@ -10,6 +10,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+<<<<<<< HEAD
+=======
+
+builder.Services.AddScoped<SimpleWebsite.Services.EmailService>();
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
 builder.Services.AddScoped<SimpleWebsite.Services.EmailService>();
 builder.Services.AddScoped<SimpleWebsite.Services.NotificationService>();

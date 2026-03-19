@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
 using SimpleWebsite.Models;
+<<<<<<< HEAD
 using SimpleWebsite.Services;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
 namespace SimpleWebsite.Controllers
 {
@@ -13,6 +16,7 @@ namespace SimpleWebsite.Controllers
     {
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
+<<<<<<< HEAD
         private readonly NotificationService notificationService;
 
         public CommentController(AppDbContext context, UserManager<Users> userManager, NotificationService notificationService)
@@ -20,6 +24,13 @@ namespace SimpleWebsite.Controllers
             this.context = context;
             this.userManager = userManager;
             this.notificationService = notificationService;
+=======
+
+        public CommentController(AppDbContext context, UserManager<Users> userManager)
+        {
+            this.context = context;
+            this.userManager = userManager;
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         }
 
         [HttpPost]
@@ -39,6 +50,7 @@ namespace SimpleWebsite.Controllers
             context.Comments.Add(comment);
             await context.SaveChangesAsync();
 
+<<<<<<< HEAD
             // Notify Instructor
             var course = await context.Courses.FindAsync(courseId);
             var student = await userManager.FindByIdAsync(userId!);
@@ -51,6 +63,8 @@ namespace SimpleWebsite.Controllers
                 );
             }
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             TempData["Success"] = "Comment added!";
             return RedirectToAction("Learn", "Course", new { id = courseId, lessonId });
         }

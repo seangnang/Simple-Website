@@ -30,8 +30,11 @@ namespace SimpleWebsite.Controllers
                 ViewBag.TotalCourses = await context.Courses.CountAsync();
                 ViewBag.TotalEnrollments = await context.Enrollments.CountAsync();
                 ViewBag.TotalCategories = await context.Categories.CountAsync();
+<<<<<<< HEAD
                 var instructors = await userManager.GetUsersInRoleAsync("Instructor");
                 ViewBag.TotalInstructors = instructors.Count;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                 ViewBag.RecentUsers = await context.Users
                     .OrderByDescending(u => u.Id)
                     .Take(5)

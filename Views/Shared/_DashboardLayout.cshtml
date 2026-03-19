@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<SimpleWebsite.Models.Users> SignInManager
 @inject UserManager<SimpleWebsite.Models.Users> UserManager
 @{
     var navUser = await UserManager.GetUserAsync(User);
 }
+=======
+﻿
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 <!doctype html>
 <html lang="en">
 
@@ -13,7 +17,10 @@
     <title>Dashboard</title>
     <link rel="shortcut icon" type="image/png" href="~/backend/assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="~/backend/assets/css/styles.min.css" />
+<<<<<<< HEAD
     <link rel="stylesheet" href="~/css/site.css" />
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
     <script src="~/backend/assets/js/sidebarmenu.js"></script>
     <style>
         .page-wrapper {
@@ -91,6 +98,7 @@
                                 </a>
                             </li>
                         }
+<<<<<<< HEAD
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
                             <span class="hide-menu">Courses Management</span>
@@ -106,6 +114,8 @@
                                 </a>
                             </li>
                         }
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
                         @if (User.IsInRole("Instructor"))
                         {
@@ -163,25 +173,50 @@
                                 </div>
                             </a>
                         </li>
+<<<<<<< HEAD
                         <li class="sidebar-item">
                             <a class="sidebar-link" asp-controller="Email" asp-action="Index">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex"><i class="ti ti-mail"></i></span>
                                     <span class="hide-menu">Email</span>
                                 </div>
+=======
+                            
+                        <li class="sidebar-item">
+                            <a class="sidebar-link justify-content-between"
+                               href="#" aria-expanded="false">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="d-flex">
+                                        <i class="ti ti-mail"></i>
+                                    </span>
+                                    <span class="hide-menu">Email</span>
+                                </div>
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between"
+<<<<<<< HEAD
                                class="sidebar-link" asp-controller="Home" asp-action="Calender" aria-expanded="false">
+=======
+                               href="#" aria-expanded="false">
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">
                                         <i class="ti ti-calendar"></i>
                                     </span>
                                     <span class="hide-menu">Calendar</span>
                                 </div>
+<<<<<<< HEAD
                             </a>
                         </li>
+=======
+
+                            </a>
+                        </li>
+                        
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -193,6 +228,7 @@
         <div class="body-wrapper">
             <header class="app-header">
                 <nav class="navbar navbar-expand-lg navbar-light">
+<<<<<<< HEAD
                     <ul class="navbar-nav w-100 d-flex align-items-center">
 
                         <!-- Hamburger -->
@@ -347,6 +383,57 @@
             </header>
             @RenderBody()
         </div>
+=======
+                    <ul class="navbar-nav w-100">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">☰</a>
+                        </li>
+
+                        <li class="nav-item dropdown ms-auto">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">🔔</a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Item 1</a></li>
+                                <li><a class="dropdown-item" href="#">Item 2</a></li>
+                                <li><a class="dropdown-item" href="#">Item 3</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <img src="~/backend/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                    <div class="message-body">
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-user fs-6"></i>
+                                            <p class="mb-0 fs-3">My Profile</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-mail fs-6"></i>
+                                            <p class="mb-0 fs-3">My Account</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-list-check fs-6"></i>
+                                            <p class="mb-0 fs-3">My Task</p>
+                                        </a>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+			@RenderBody()
+        </div>
+    </div>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
     <script src="~/backend/assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/backend/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/backend/assets/js/sidebarmenu.js"></script>
@@ -357,6 +444,7 @@
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+<<<<<<< HEAD
 
     <script>
         // Dark Mode
@@ -405,6 +493,8 @@
             }
         });
     </script>
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 </body>
 
 </html>

@@ -29,7 +29,10 @@ namespace SimpleWebsite.Controllers
                 Email = user.Email ?? string.Empty,
             };
 
+<<<<<<< HEAD
             ViewBag.ProfilePicture = user.ProfilePicture;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             return View(model);
         }
 
@@ -61,6 +64,7 @@ namespace SimpleWebsite.Controllers
             return View(model);
         }
 
+<<<<<<< HEAD
         // ── Upload Profile Picture ─────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,6 +113,9 @@ namespace SimpleWebsite.Controllers
         }
 
         // ── Change Password ────────────────────────────────────────
+=======
+        // Change Password
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)

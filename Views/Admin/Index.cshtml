@@ -7,6 +7,7 @@
 <div class="container-fluid">
     <div class="card bg-light-info shadow-none mb-4">
         <div class="card-body px-4 py-3">
+<<<<<<< HEAD
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="fw-semibold mb-1">User Management</h4>
@@ -29,6 +30,15 @@
                     </button>
                 </div>
             </div>
+=======
+            <h4 class="fw-semibold mb-1">User Management</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Users</li>
+                </ol>
+            </nav>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         </div>
     </div>
 
@@ -39,6 +49,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
+<<<<<<< HEAD
     @if (TempData["Error"] != null)
     {
         <div class="alert alert-danger alert-dismissible">
@@ -46,17 +57,26 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
     <div class="card">
         <div class="card-body p-0">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
+<<<<<<< HEAD
                         <th>User</th>
                         <th>Name</th>
                         <th>Current Role</th>
                         <th>Assign Role</th>
                         <th>Action</th>
+=======
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Current Role</th>
+                        <th>Assign Role</th>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +84,7 @@
                     {
                         var roles = ViewBag.UserRoles[user.Id] as IList<string>;
                         <tr>
+<<<<<<< HEAD
                             <!-- User with avatar + email -->
                             <td>
                                 <div class="d-flex align-items-center gap-3">
@@ -95,12 +116,21 @@
 
                             <!-- Current Role -->
                             <td class="align-middle">
+=======
+                            <td>@user.Email</td>
+                            <td>@user.Fullname</td>
+                            <td>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                 @if (roles != null && roles.Any())
                                 {
                                     foreach (var role in roles)
                                     {
                                         <span class="badge @(role == "Admin" ? "bg-danger" : role == "Instructor" ? "bg-warning text-dark" : "bg-success")">
+<<<<<<< HEAD
                                             @(role == "Admin" ? "👑 Admin" : role == "Instructor" ? "👨‍🏫 Instructor" : "🎓 Student")
+=======
+                                            @role
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                         </span>
                                     }
                                 }
@@ -109,10 +139,16 @@
                                     <span class="badge bg-secondary">No Role</span>
                                 }
                             </td>
+<<<<<<< HEAD
 
                             <!-- Assign Role -->
                             <td class="align-middle">
                                 <div class="d-flex gap-2 flex-wrap">
+=======
+                            <td>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <!-- Assign Admin -->
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Admin" />
@@ -120,6 +156,11 @@
                                             <i class="ti ti-shield me-1"></i>Admin
                                         </button>
                                     </form>
+<<<<<<< HEAD
+=======
+
+                                    <!-- Assign Instructor -->
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Instructor" />
@@ -127,6 +168,11 @@
                                             <i class="ti ti-chalkboard me-1"></i>Instructor
                                         </button>
                                     </form>
+<<<<<<< HEAD
+=======
+
+                                    <!-- Assign Student -->
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                     <form asp-action="AssignRole" method="post" style="display:inline">
                                         <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="roleName" value="Student" />
@@ -134,6 +180,11 @@
                                             <i class="ti ti-school me-1"></i>Student
                                         </button>
                                     </form>
+<<<<<<< HEAD
+=======
+
+                                    <!-- Remove Role -->
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                     @if (roles != null && roles.Any())
                                     {
                                         <form asp-action="RemoveRole" method="post" style="display:inline">
@@ -146,6 +197,7 @@
                                     }
                                 </div>
                             </td>
+<<<<<<< HEAD
 
                             <!-- Delete -->
                             <td class="align-middle">
@@ -157,12 +209,15 @@
                                     </button>
                                 </form>
                             </td>
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
 
 <!-- Create User Modal -->
@@ -229,4 +284,6 @@
             </form>
         </div>
     </div>
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 </div>

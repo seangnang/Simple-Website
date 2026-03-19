@@ -30,6 +30,7 @@
                      class="card-img-top" style="height:300px; object-fit:cover;" />
                 <div class="card-body">
                     <h4 class="fw-semibold">@Model.Title</h4>
+<<<<<<< HEAD
 
                     <!-- Instructor Info with Picture -->
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -62,6 +63,11 @@
                         </span>
                     }
 
+=======
+                    <p class="text-muted">
+                        <i class="ti ti-user me-1"></i>Instructor: <strong>@Model.Instructor?.Fullname</strong>
+                    </p>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                     <hr />
                     <h6 class="fw-semibold">About this course</h6>
                     <p>@Model.Description</p>
@@ -98,7 +104,11 @@
                                     {
                                         <a asp-controller="Course" asp-action="Preview"
                                            asp-route-lessonId="@lesson.LessonId"
+<<<<<<< HEAD
                                            class="badge bg-success text-white text-decoration-none">
+=======
+                                           class="badge bg-success text-white">
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                                             Free Preview
                                         </a>
                                     }
@@ -156,6 +166,7 @@
                             <i class="ti ti-login me-2"></i>Login to Enroll
                         </a>
                     }
+<<<<<<< HEAD
 
                     <hr />
                     <ul class="list-unstyled text-start">
@@ -179,6 +190,14 @@
 
         <!-- Reviews Section -->
         <div class="col-lg-8 mt-4">
+=======
+                </div>
+            </div>
+        </div>
+        <!-- Reviews Section -->
+        <div class="col-lg-8 mt-4">
+            <!-- Average Rating -->
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="fw-semibold mb-3">
@@ -235,6 +254,7 @@
                     @foreach (var review in ViewBag.Reviews)
                     {
                         <div class="d-flex gap-3 mb-3">
+<<<<<<< HEAD
                             @if (!string.IsNullOrEmpty(review.Student?.ProfilePicture))
                             {
                                 <img src="@review.Student.ProfilePicture"
@@ -249,6 +269,13 @@
                                     <i class="ti ti-user text-primary"></i>
                                 </div>
                             }
+=======
+                            <div class="rounded-circle bg-light-primary d-flex align-items-center
+                                    justify-content-center flex-shrink-0"
+                                 style="width:45px; height:45px;">
+                                <i class="ti ti-user text-primary"></i>
+                            </div>
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-semibold mb-0">@review.Student?.Fullname</p>

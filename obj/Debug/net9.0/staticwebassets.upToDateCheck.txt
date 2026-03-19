@@ -674,6 +674,7 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+<<<<<<< HEAD
 wwwroot\uploads\courses\2787f082-cd65-4ce3-906e-29e239577a66_C-sharp.jpg
 wwwroot\uploads\courses\460e34b5-452d-4494-a3f6-86fa1f3697e9_laravel.png
 wwwroot\uploads\courses\676a803f-e7fe-4641-a850-59a2a55f9b47_Laravel_Logo.png
@@ -690,10 +691,16 @@ wwwroot\uploads\videos\1cf88fc3-964d-483a-964d-71474a2f1548_Screen Recording 202
 wwwroot\uploads\videos\2f5f6a70-aa0d-40df-9938-646deb9381e3.mp4
 wwwroot\uploads\videos\5fc57386-60f7-4d0b-a2e4-d544f4f3c641_Screen Recording 2026-01-16 175638.mp4
 wwwroot\uploads\videos\6e889b6f-48b8-42d5-b0c2-140e25e49247_Recording 2026-02-22 163902.mp4
+=======
+wwwroot\uploads\courses\676a803f-e7fe-4641-a850-59a2a55f9b47_Laravel_Logo.png
+wwwroot\uploads\courses\cf35268f-31e2-485a-8ad4-54e0e3a8f445_ux-ui.png
+wwwroot\uploads\videos\2f5f6a70-aa0d-40df-9938-646deb9381e3.mp4
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 wwwroot\uploads\videos\7dd6130b-ddda-40a5-9426-7e845d8f1285_Recording 2026-02-22 163902.mp4
 wwwroot\uploads\videos\b6045f8d-04c5-48ee-ac70-99edbd21a757.mp4
 wwwroot\uploads\videos\cfe861c1-dead-4a95-aa91-654d7b1fbe64.mp4
 wwwroot\uploads\videos\eb967e0b-30e0-45fd-92fb-90c6fe7859e1.mp4
+<<<<<<< HEAD
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-typography.html
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\css\account.css
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\css\site.css
@@ -757,6 +764,8 @@ D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.m
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.js
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.min.map
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-forms.html
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\assets\css\icons\tabler-icons\fonts\tabler-icons.svg
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\assets\css\icons\tabler-icons\tabler-icons.css
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\LICENSE.txt
@@ -1239,4 +1248,72 @@ D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\sample-page.html
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-alerts.html
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-buttons.html
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-card.html
+<<<<<<< HEAD
 D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.min.map
+=======
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-forms.html
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\backend\ui-typography.html
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\css\account.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\css\site.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\favicon.ico
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\js\site.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation\dist\additional-methods.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery-validation\LICENSE.md
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.min.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.min.js
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\dist\jquery.slim.min.map
+D:\year3-s2\1-Monday\Project\SimpleWebsite\wwwroot\lib\jquery\LICENSE.txt
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f

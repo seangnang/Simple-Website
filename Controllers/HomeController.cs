@@ -43,7 +43,10 @@ namespace SimpleWebsite.Controllers
 
             return View();
         }
+<<<<<<< HEAD
 
         public IActionResult Calender() => View();
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
     }
 }

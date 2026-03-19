@@ -18,8 +18,11 @@ namespace SimpleWebsite.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+<<<<<<< HEAD
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -72,6 +75,7 @@ namespace SimpleWebsite.Data
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+<<<<<<< HEAD
             builder.Entity<Notification>()
                 .HasOne(n => n.User)
                 .WithMany()
@@ -82,6 +86,8 @@ namespace SimpleWebsite.Data
                 .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         }
     }
 }

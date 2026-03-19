@@ -168,9 +168,14 @@ D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\ppmqqibav
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\2btqz3jirv-f9z9jh6p0e.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\86oy9pfuxw-ort7e66on7.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\fisaddlz2u-8ryp6bsq5o.gz
+<<<<<<< HEAD
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\vwu14oq1yh-rtsphto2bs.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\opdlmync11-cehmat9yk6.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\yufinecxs6-jrv58g5b5w.gz
+=======
+D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\opdlmync11-cehmat9yk6.gz
+D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\yufinecxs6-rtsphto2bs.gz
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\d95dozp588-wzem6s9vit.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\3q6gfrauh5-rd8a5gdj4n.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\08yunxvk1x-cmu70airaa.gz
@@ -648,7 +653,11 @@ D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\zwmbl41yq
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\ayivpy1w2m-kwxpismttl.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\ymkkv56j2m-lz2e2fux1o.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\f6c1pvo3s3-1tawiml5gt.gz
+<<<<<<< HEAD
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\cojy4ktkq7-d0ma69vcta.gz
+=======
+D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\cojy4ktkq7-b9sayid5wm.gz
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\ncnftix8h0-61n19gt1b8.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\mj9x6xoskn-e710dyq4bi.gz
 D:\year3-s2\1-Monday\Project\SimpleWebsite\obj\Debug\net9.0\compressed\oklkidsob2-t1cqhe9u97.gz

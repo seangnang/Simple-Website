@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
 using SimpleWebsite.Models;
+<<<<<<< HEAD
 using SimpleWebsite.Services;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
 namespace SimpleWebsite.Controllers
 {
@@ -13,6 +16,7 @@ namespace SimpleWebsite.Controllers
     {
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
+<<<<<<< HEAD
         private readonly NotificationService notificationService;
 
         public ReviewController(AppDbContext context, UserManager<Users> userManager, NotificationService notificationService)
@@ -20,6 +24,13 @@ namespace SimpleWebsite.Controllers
             this.context = context;
             this.userManager = userManager;
             this.notificationService = notificationService;
+=======
+
+        public ReviewController(AppDbContext context, UserManager<Users> userManager)
+        {
+            this.context = context;
+            this.userManager = userManager;
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         }
 
         [HttpPost]
@@ -28,6 +39,10 @@ namespace SimpleWebsite.Controllers
         {
             var userId = userManager.GetUserId(User);
 
+<<<<<<< HEAD
+=======
+            // Check if student is enrolled
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             var enrolled = await context.Enrollments
                 .AnyAsync(e => e.StudentId == userId && e.CourseId == courseId);
 
@@ -37,6 +52,10 @@ namespace SimpleWebsite.Controllers
                 return RedirectToAction("Details", "Course", new { id = courseId });
             }
 
+<<<<<<< HEAD
+=======
+            // Check if already reviewed
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             var alreadyReviewed = await context.Reviews
                 .AnyAsync(r => r.StudentId == userId && r.CourseId == courseId);
 
@@ -58,6 +77,7 @@ namespace SimpleWebsite.Controllers
             context.Reviews.Add(review);
             await context.SaveChangesAsync();
 
+<<<<<<< HEAD
             // Notify Instructor
             var course = await context.Courses.FindAsync(courseId);
             var student = await userManager.FindByIdAsync(userId!);
@@ -70,6 +90,8 @@ namespace SimpleWebsite.Controllers
                 );
             }
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             TempData["Success"] = "Review submitted successfully!";
             return RedirectToAction("Details", "Course", new { id = courseId });
         }

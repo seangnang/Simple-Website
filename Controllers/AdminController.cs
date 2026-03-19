@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+<<<<<<< HEAD
 using Microsoft.EntityFrameworkCore;
 using SimpleWebsite.Data;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 using SimpleWebsite.Models;
 
 namespace SimpleWebsite.Controllers
@@ -10,6 +13,7 @@ namespace SimpleWebsite.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+<<<<<<< HEAD
         private readonly AppDbContext context;
         private readonly UserManager<Users> userManager;
 
@@ -26,18 +30,45 @@ namespace SimpleWebsite.Controllers
             var userRoles = new Dictionary<string, IList<string>>();
             foreach (var user in users)
                 userRoles[user.Id] = await userManager.GetRolesAsync(user);
+=======
+        private readonly UserManager<Users> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+
+        public AdminController(UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var users = userManager.Users.ToList();
+
+            // Get each user's roles
+            var userRoles = new Dictionary<string, IList<string>>();
+            foreach (var user in users)
+            {
+                userRoles[user.Id] = await userManager.GetRolesAsync(user);
+            }
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
 
             ViewBag.UserRoles = userRoles;
             return View(users);
         }
 
+<<<<<<< HEAD
         [HttpPost]
         [ValidateAntiForgeryToken]
+=======
+        // Assign role to user
+        [HttpPost]
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         public async Task<IActionResult> AssignRole(string userId, string roleName)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user == null) return NotFound();
 
+<<<<<<< HEAD
             var currentRoles = await userManager.GetRolesAsync(user);
             await userManager.RemoveFromRolesAsync(user, currentRoles);
             await userManager.AddToRoleAsync(user, roleName);
@@ -48,11 +79,22 @@ namespace SimpleWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+=======
+            if (!await userManager.IsInRoleAsync(user, roleName))
+                await userManager.AddToRoleAsync(user, roleName);
+
+            return RedirectToAction("Index");
+        }
+
+        // Remove role from user
+        [HttpPost]
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         public async Task<IActionResult> RemoveRole(string userId, string roleName)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user == null) return NotFound();
 
+<<<<<<< HEAD
             await userManager.RemoveFromRoleAsync(user, roleName);
             TempData["Success"] = "Role removed successfully!";
             return RedirectToAction("Index");
@@ -145,5 +187,12 @@ namespace SimpleWebsite.Controllers
             return RedirectToAction("Index");
         }
 
+=======
+            if (await userManager.IsInRoleAsync(user, roleName))
+                await userManager.RemoveFromRoleAsync(user, roleName);
+
+            return RedirectToAction("Index");
+        }
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
     }
 }

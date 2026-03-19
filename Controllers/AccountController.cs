@@ -11,14 +11,22 @@ namespace SimpleWebsite.Controllers
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+<<<<<<< HEAD
         private readonly NotificationService notificationService;
 
         public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager , NotificationService notificationService)
+=======
+
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.roleManager = roleManager;
+<<<<<<< HEAD
             this.notificationService = notificationService;
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         }
 
         public IActionResult Index() => View();
@@ -50,8 +58,14 @@ namespace SimpleWebsite.Controllers
             return View(model);
         }
 
+<<<<<<< HEAD
         // GET
         public IActionResult Register() => View();
+=======
+        // ── Register ─────────────────────────────────────────────
+        public IActionResult Register() => View();
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -63,10 +77,15 @@ namespace SimpleWebsite.Controllers
                     Email = model.Email,
                     UserName = model.Email,
                 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Student");
+<<<<<<< HEAD
 
                     // ← Notify Admin here inside Succeeded block
                     var adminUsers = await userManager.GetUsersInRoleAsync("Admin");
@@ -81,6 +100,11 @@ namespace SimpleWebsite.Controllers
 
                     return RedirectToAction("Login", "Account");
                 }
+=======
+                    return RedirectToAction("Login", "Account");
+                }
+
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
                 foreach (var error in result.Errors)
                     ModelState.AddModelError("", error.Description);
             }

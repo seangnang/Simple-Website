@@ -291,6 +291,7 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("Courses");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("SimpleWebsite.Models.EmailLog", b =>
                 {
                     b.Property<int>("EmailLogId")
@@ -324,6 +325,8 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("EmailLogs");
                 });
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             modelBuilder.Entity("SimpleWebsite.Models.Enrollment", b =>
                 {
                     b.Property<int>("EnrollmentId")
@@ -418,6 +421,7 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("LessonProgresses");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("SimpleWebsite.Models.Notification", b =>
                 {
                     b.Property<int>("NotificationId")
@@ -451,6 +455,8 @@ namespace SimpleWebsite.Migrations
                     b.ToTable("Notifications");
                 });
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             modelBuilder.Entity("SimpleWebsite.Models.Review", b =>
                 {
                     b.Property<int>("ReviewId")
@@ -645,6 +651,7 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("Instructor");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("SimpleWebsite.Models.EmailLog", b =>
                 {
                     b.HasOne("SimpleWebsite.Models.Users", "User")
@@ -656,6 +663,8 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("User");
                 });
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             modelBuilder.Entity("SimpleWebsite.Models.Enrollment", b =>
                 {
                     b.HasOne("SimpleWebsite.Models.Course", "Course")
@@ -705,6 +714,7 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("Lesson");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("SimpleWebsite.Models.Notification", b =>
                 {
                     b.HasOne("SimpleWebsite.Models.Users", "User")
@@ -716,6 +726,8 @@ namespace SimpleWebsite.Migrations
                     b.Navigation("User");
                 });
 
+=======
+>>>>>>> 12cce462aa52a2c7f4e0f4941ece9d4f5ec0d21f
             modelBuilder.Entity("SimpleWebsite.Models.Review", b =>
                 {
                     b.HasOne("SimpleWebsite.Models.Course", "Course")
